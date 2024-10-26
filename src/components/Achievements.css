@@ -1,0 +1,83 @@
+.e-card {
+  margin: 50px auto;
+  width: 240px;
+  height: 330px;
+  background: transparent;
+  box-shadow: 0px 8px 28px -9px rgba(0, 0, 0, 0.45);
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.wave {
+  position: absolute;
+  width: 540px;
+  height: 700px;
+  left: 0;
+  top: 0;
+  margin-left: -50%;
+  margin-top: -70%;
+  opacity: 0.6;
+  background: linear-gradient(744deg, #af40ff, #5b42f3 60%, #00ddeb);
+  border-radius: 40%;
+  animation: wave-rotate 55s infinite linear;
+}
+
+/* Specific wave speeds for individual waves */
+.wave:nth-child(2) {
+  animation-duration: 50s;
+  top: 210px;
+}
+
+.wave:nth-child(3) {
+  animation-duration: 45s;
+  top: 210px;
+}
+
+.playing .wave {
+  animation: wave-rotate 3000ms infinite linear;
+}
+
+.playing .wave:nth-child(2) {
+  animation-duration: 4000ms;
+}
+
+.playing .wave:nth-child(3) {
+  animation-duration: 5000ms;
+}
+
+/* Animation for wave rotation */
+@keyframes wave-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Card content */
+.infotop {
+  position: absolute;
+  top: 5.6em;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.icon {
+  width: 3em;
+  margin-top: -1em;
+  padding-bottom: 1em;
+}
+
+.name {
+  font-size: 14px;
+  font-weight: 100;
+  position: relative;
+  top: 1em;
+  text-transform: lowercase;
+}

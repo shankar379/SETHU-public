@@ -1,0 +1,29 @@
+.main {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.up, .down {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+button {
+  background-color: white;
+  border-radius: 50%;
+  padding: 15px;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+button:hover {
+  background-color: #f0f0f0;
+  transform: scale(1.1);
+}
+
+.instagram { fill: #833AB4; }
+.twitter { fill: #1DA1F2; }
+.github { fill: #333; }
+.linkedin { fill: #0e76a8; }

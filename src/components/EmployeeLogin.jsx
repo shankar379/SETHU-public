@@ -37,18 +37,23 @@ const EmployeeLogin = ({ setLoggedInUser }) => {
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      <div className="max-w-md mx-auto bg-white shadow-md rounded p-6">
-        <h2 className="text-2xl font-bold mb-4 text-black">Employee Login</h2>
-        {error && <p className="text-red-500 mb-4">{error}</p>}
-        <form onSubmit={handleLogin} className="space-y-4">
+    <div
+      className="w-full flex items-center justify-center min-h-screen"
+      style={{
+        background: 'linear-gradient(135deg, #EDA49D, #D1495B, #00798C, #30638E, #003D5B)',
+      }}
+    >
+      <div className="w-full max-w-md mx-auto bg-white shadow-lg rounded-lg p-8">
+        <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">Employee Login</h2>
+        {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
+        <form onSubmit={handleLogin} className="space-y-6">
           <input
             type="text"
             value={employeeId}
             onChange={(e) => setEmployeeId(e.target.value)}
             placeholder="Employee ID"
             required
-            className="w-full p-2 border border-gray-300 rounded text-black"
+            className="w-full p-3 bg-gray-100 text-gray-800 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#00798C]"
           />
           <input
             type="password"
@@ -56,11 +61,11 @@ const EmployeeLogin = ({ setLoggedInUser }) => {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
             required
-            className="w-full p-2 border border-gray-300 rounded text-black"
+            className="w-full p-3 bg-gray-100 text-gray-800 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#00798C]"
           />
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white p-2 rounded"
+            className="w-full py-3 bg-[#D1495B] text-white font-semibold rounded-md hover:bg-[#B1374B] transition duration-200"
           >
             Login
           </button>

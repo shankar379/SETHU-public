@@ -1,0 +1,80 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #f2f2f2;
+}
+
+.colleges {
+  background: #fff;
+  padding: 60px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.logos {
+  overflow: hidden;
+  display: flex;
+  white-space: nowrap;
+}
+
+.logos-slide {
+  display: flex;
+  animation: slide 35s linear infinite;
+}
+
+.college-item {
+  position: relative;
+  width: 300px; /* Increased width */
+  max-width: 100%; /* Ensures responsiveness */
+  margin: 0 30px; /* Increased margin for better spacing */
+  text-align: center;
+}
+
+.college-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px; /* Slightly larger border-radius */
+}
+
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.8); /* Lighter background */
+  color: #000; /* Black text */
+  padding: 12px; /* Increased padding */
+  opacity: 0;
+  transition: opacity 0.3s;
+  border-radius: 10px;
+}
+
+.college-item:hover .overlay {
+  opacity: 1;
+}
+
+.upload-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.upload-button:hover {
+  background-color: #0056b3;
+}

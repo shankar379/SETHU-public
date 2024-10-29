@@ -1,83 +1,68 @@
-.e-card {
-  margin: 50px auto;
-  width: 240px;
-  height: 330px;
-  background: transparent;
-  box-shadow: 0px 8px 28px -9px rgba(0, 0, 0, 0.45);
-  position: relative;
-  border-radius: 16px;
-  overflow: hidden;
+/* Color Variables */
+:root {
+  --primary-color: #00ffcc; /* For glowing borders and text */
+  --secondary-color: #00aaff;
+  --bg-tertiary: #1f1f1f;
+  --text-white: #ffffff;
+  --text-secondary: #b0b0b0;
 }
 
-.wave {
-  position: absolute;
-  width: 540px;
-  height: 700px;
-  left: 0;
-  top: 0;
-  margin-left: -50%;
-  margin-top: -70%;
-  opacity: 0.6;
-  background: linear-gradient(744deg, #af40ff, #5b42f3 60%, #00ddeb);
-  border-radius: 40%;
-  animation: wave-rotate 55s infinite linear;
+/* Achievements Section */
+.achievements-section {
+  background-color: var(--bg-tertiary);
+  padding: 50px 0;
 }
 
-/* Specific wave speeds for individual waves */
-.wave:nth-child(2) {
-  animation-duration: 50s;
-  top: 210px;
-}
-
-.wave:nth-child(3) {
-  animation-duration: 45s;
-  top: 210px;
-}
-
-.playing .wave {
-  animation: wave-rotate 3000ms infinite linear;
-}
-
-.playing .wave:nth-child(2) {
-  animation-duration: 4000ms;
-}
-
-.playing .wave:nth-child(3) {
-  animation-duration: 5000ms;
-}
-
-/* Animation for wave rotation */
-@keyframes wave-rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/* Card content */
-.infotop {
-  position: absolute;
-  top: 5.6em;
-  left: 0;
-  right: 0;
+.section-title {
+  color: var(--text-white);
+  font-size: 32px;
+  font-weight: bold;
   text-align: center;
-  color: #fff;
-  font-size: 20px;
-  font-weight: 600;
+  margin-bottom: 10px;
 }
 
-.icon {
-  width: 3em;
-  margin-top: -1em;
-  padding-bottom: 1em;
+.section-subtitle {
+  color: var(--text-secondary);
+  font-size: 18px;
+  text-align: center;
 }
 
-.name {
-  font-size: 14px;
-  font-weight: 100;
+/* Achievement Card */
+.achievement-card {
   position: relative;
-  top: 1em;
-  text-transform: lowercase;
+  border: 2px solid transparent;
+  background-color: var(--bg-tertiary);
+  border-radius: 20px;
+  box-shadow: 0 0 20px var(--primary-color);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.achievement-card:hover {
+  box-shadow: 0 0 30px var(--primary-color), 0 0 60px var(--secondary-color);
+  transform: scale(1.05);
+}
+
+/* Icon and Title */
+.achievement-card img {
+  filter: drop-shadow(0 0 10px var(--primary-color));
+  transition: transform 0.3s ease;
+}
+
+.achievement-card:hover img {
+  transform: scale(1.1);
+}
+
+.achievement-card h3 {
+  color: var(--primary-color);
+  font-size: 20px;
+  margin-top: 10px;
+}
+
+/* Counter Text */
+.achievement-card p {
+  color: var(--text-secondary);
+  font-size: 16px;
+  margin-top: 8px;
+  font-weight: bold;
+  text-shadow: 0px 0px 8px var(--primary-color);
 }

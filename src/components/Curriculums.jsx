@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { storage } from '../firebase'; // Assume storage is properly initialized
+import { storage } from '../firebase';
 import { ref, listAll, getDownloadURL, uploadBytes } from 'firebase/storage';
 
 // Function to generate a random color
@@ -19,70 +19,61 @@ const Curriculums = () => {
   const [newFolderName, setNewFolderName] = useState('');
   const [selectedFolder, setSelectedFolder] = useState('');
 
-  useEffect(() => {
-    const fetchFolders = async () => {
-      const storageRef = ref(storage, '/');
-      const folderList = await listAll(storageRef);
-      const folderData = await Promise.all(
-        folderList.prefixes.map(async (folderRef) => {
-          const folderContent = await listAll(folderRef);
-          const files = await Promise.all(
-            folderContent.items.map(async (itemRef) => {
-              const url = await getDownloadURL(itemRef);
-              return { name: itemRef.name, url };
-            })
-          );
-          return { name: folderRef.name, files };
-        })
-      );
-      setFolders(folderData);
-    };
+  // Fetch folders and files within the "Curriculums" main folder
+  const fetchFolders = async () => {
+    const storageRef = ref(storage, '/Curriculums');
+    const folderList = await listAll(storageRef);
+    const folderData = await Promise.all(
+      folderList.prefixes.map(async (folderRef) => {
+        const folderContent = await listAll(folderRef);
+        const files = await Promise.all(
+          folderContent.items.map(async (itemRef) => {
+            const url = await getDownloadURL(itemRef);
+            return { name: itemRef.name, url };
+          })
+        );
+        return { name: folderRef.name, files };
+      })
+    );
+    setFolders(folderData);
+  };
 
+  useEffect(() => {
     fetchFolders();
   }, []);
 
-  // Function to handle file selection
-  const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
-  };
+  // Handle file selection
+  const handleFileChange = (e) => setSelectedFile(e.target.files[0]);
 
-  // Function to handle file upload
+  // Handle file upload
   const handleUpload = async () => {
-    if (!selectedFile || !selectedFolder) return; // Ensure a folder is selected
+    if (!selectedFile || !selectedFolder) return;
     setUploading(true);
-    
-    // Create a reference to the selected folder and the file being uploaded
-    const fileRef = ref(storage, `${selectedFolder}/${selectedFile.name}`);
-    
+
+    const fileRef = ref(storage, `Curriculums/${selectedFolder}/${selectedFile.name}`);
     try {
-      await uploadBytes(fileRef, selectedFile); // Upload the selected PDF file
-      console.log(`Uploaded ${selectedFile.name} to ${selectedFolder}`); // Log success message
+      await uploadBytes(fileRef, selectedFile);
+      console.log(`Uploaded ${selectedFile.name} to Curriculums/${selectedFolder}`);
     } catch (error) {
-      console.error('Error uploading file:', error); // Log error if upload fails
+      console.error('Error uploading file:', error);
     } finally {
-      setUploading(false); // Reset uploading state
-      setSelectedFile(null); // Clear the selected file
-      fetchFolders(); // Refetch folders after the upload
+      setUploading(false);
+      setSelectedFile(null);
+      fetchFolders();
     }
   };
 
-  // Function to handle new folder creation
-  const handleCreateFolder = async () => {
+  // Handle new folder creation within "Curriculums"
+  const handleCreateFolder = () => {
     if (!newFolderName) return;
 
-    const folderRef = ref(storage, `/${newFolderName}/`);
-
-    // Optionally, perform an initial upload to create the folder
-    await uploadBytes(ref(folderRef, 'placeholder.txt'), new Blob(['']), { contentType: 'text/plain' });
-
+    // Add new folder to state
+    setFolders((prevFolders) => [...prevFolders, { name: newFolderName, files: [] }]);
     setNewFolderName('');
-    // Refetch folders after creation
-    fetchFolders();
   };
 
   return (
     <div className="p-8 bg-black text-white">
-      {/* Section title */}
       <h2 className="text-3xl font-bold mb-6 text-center text-[rgba(75,30,133,1)]">
         Curriculums
       </h2>
@@ -104,31 +95,24 @@ const Curriculums = () => {
         </button>
       </div>
 
-      {/* Enhanced Folder Selection Section */}
+      {/* Folder Selection Section */}
       <div className="mb-6">
         <label htmlFor="folderSelect" className="block mb-2 font-semibold text-lg">
           Select Folder:
         </label>
-        <div className="relative inline-block w-full">
-          <select
-            id="folderSelect"
-            value={selectedFolder}
-            onChange={(e) => setSelectedFolder(e.target.value)}
-            className="block appearance-none w-full bg-white border-2 border-gray-300 rounded-lg p-2 pr-8 focus:outline-none focus:border-[rgba(75,30,133,1)]"
-          >
-            <option value="">-- Select a Folder --</option>
-            {folders.map((folder, index) => (
-              <option key={index} value={folder.name} className="text-gray-800">
-                {folder.name}
-              </option>
-            ))}
-          </select>
-          <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-            <svg className="w-4 h-4 text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 10l5 5 5-5H7z" />
-            </svg>
-          </div>
-        </div>
+        <select
+          id="folderSelect"
+          value={selectedFolder}
+          onChange={(e) => setSelectedFolder(e.target.value)}
+          className="block appearance-none w-full bg-white border-2 border-gray-300 rounded-lg p-2 pr-8 focus:outline-none focus:border-[rgba(75,30,133,1)]"
+        >
+          <option value="">-- Select a Folder --</option>
+          {folders.map((folder, index) => (
+            <option key={index} value={folder.name}>
+              {folder.name}
+            </option>
+          ))}
+        </select>
       </div>
 
       {/* Upload Section */}
@@ -155,7 +139,7 @@ const Curriculums = () => {
       {/* Folder Content Display */}
       <div className="flex flex-wrap gap-4 justify-center mb-6">
         {folders.map((folder, index) => {
-          const randomColor = getRandomColor(); // Generate a random color for each folder
+          const randomColor = getRandomColor();
           return (
             <div key={index} className="group overflow-hidden rounded-xl text-gray-50" style={{ backgroundColor: randomColor }}>
               <div className="before:duration-700 before:absolute before:w-28 before:h-28 before:bg-transparent before:blur-none before:border-8 before:opacity-50 before:rounded-full before:-left-4 before:-top-12 w-64 h-48 flex flex-col justify-between relative z-10 group-hover:before:top-28 group-hover:before:left-44 group-hover:before:scale-125 group-hover:before:blur">

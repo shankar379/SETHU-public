@@ -51,15 +51,18 @@ const Register = () => {
 
   return (
     <div
-      className="min-h-screen w-full flex justify-center items-center"
-      style={{
-        backgroundImage: 'url(/images/sethu3.png)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        color: '#FFFFFF',
-      }}
-    >
+  className="min-h-screen w-full flex justify-center items-center"
+  style={{
+    backgroundImage: 'url(/images/sethu3.png)',
+    backgroundSize: 'cover',      // Adjust to cover the screen
+    backgroundPosition: 'center', // Center the image
+    backgroundRepeat: 'no-repeat',
+    color: '#FFFFFF',
+    minHeight: '100vh',           // Ensure it covers the full height
+    backgroundAttachment: 'fixed' // Keeps the background fixed during scroll
+  }}
+>
+
       <div
         className="p-6 sm:p-8 lg:p-10 rounded-lg shadow-2xl"
         style={{

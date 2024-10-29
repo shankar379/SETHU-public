@@ -1,88 +1,154 @@
-import React from 'react';
+import React, { useRef, useState, Suspense } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { OrbitControls, Preload, useGLTF, Points, PointMaterial, Html, useProgress } from "@react-three/drei";
+import { motion } from "framer-motion";
+import emailjs from "@emailjs/browser";
+import * as random from "maath/random/dist/maath-random.esm";
 
-const ContactUs = () => {
+// Styles with Gradient Enhancement
+const styles = {
+  paddingX: "sm:px-16 px-6",
+  paddingY: "sm:py-16 py-6",
+  padding: "sm:px-16 px-6 sm:py-16 py-10",
+  heroHeadText: "font-black text-white lg:text-[80px] sm:text-[60px] xs:text-[50px] text-[40px] lg:leading-[98px] mt-2",
+  heroSubText: "text-[#dfd9ff] font-medium lg:text-[30px] sm:text-[26px] xs:text-[20px] text-[16px] lg:leading-[40px]",
+  sectionHeadText: "text-white font-black md:text-[60px] sm:text-[50px] xs:text-[40px] text-[30px]",
+  sectionSubText: "sm:text-[18px] text-[14px] text-secondary uppercase tracking-wider",
+};
+
+// Motion variants
+const slideIn = (direction, type, delay, duration) => ({
+  hidden: {
+    x: direction === "left" ? "-100%" : direction === "right" ? "100%" : 0,
+    y: direction === "up" ? "100%" : direction === "down" ? "100%" : 0,
+  },
+  show: {
+    x: 0,
+    y: 0,
+    transition: { type, delay, duration, ease: "easeOut" },
+  },
+});
+
+const staggerContainer = (staggerChildren, delayChildren) => ({
+  hidden: {},
+  show: { transition: { staggerChildren, delayChildren: delayChildren || 0 } },
+});
+
+// Components
+const Earth = () => {
+  const earth = useGLTF("/planet/scene.gltf");
+  return <primitive object={earth.scene} scale={2.5} position-y={0} rotation-y={0} />;
+};
+
+const EarthCanvas = () => (
+  <Canvas shadows frameloop='demand' dpr={[1, 2]} gl={{ preserveDrawingBuffer: true }}
+    camera={{ fov: 45, near: 0.1, far: 200, position: [-4, 3, 6] }}>
+    <Suspense fallback={<CanvasLoader />}>
+      <OrbitControls autoRotate enableZoom={false} maxPolarAngle={Math.PI / 2} minPolarAngle={Math.PI / 2} />
+      <Earth />
+      <Preload all />
+    </Suspense>
+  </Canvas>
+);
+
+const CanvasLoader = () => {
+  const { progress } = useProgress();
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="flex w-3/4 shadow-lg">
-        {/* Left Section */}
-        <div className="bg-black text-white p-8 rounded-l-lg w-1/2 flex flex-col justify-between">
-          <div>
-            <h2 className="text-4xl font-bold mb-4">Get in Touch</h2>
-            <p className="text-lg leading-relaxed mb-8">
-              You need more information? Check what other persons are saying about our product. They are very happy with their purchase.
-            </p>
-          </div>
-          <div className="mb-8">
-            <div className="flex items-center mb-4">
-              <svg className="w-6 h-6 mr-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M16 10.733V5.5a2.5 2.5 0 00-2.5-2.5h-7A2.5 2.5 0 004 5.5v13A2.5 2.5 0 006.5 21h7a2.5 2.5 0 002.5-2.5v-5.233"></path>
-              </svg>
-              <div>
-                <p className="font-semibold">Find us at the office</p>
-                <p>Bld Mihail Kogalniceanu, nr. 8, 7652 Bucharest, Romania</p>
-              </div>
-            </div>
-            <div className="flex items-center">
-              <svg className="w-6 h-6 mr-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 10v5c0 1.5 1.5 3 3 3h3a2 2 0 002-2v-1.586a1 1 0 011.707-.707L16 18l4.293-4.293a1 1 0 00.707-1.707V5a2 2 0 00-2-2h-5"></path>
-              </svg>
-              <div>
-                <p className="font-semibold">Give us a ring</p>
-                <p>Michael Jordan</p>
-                <p>+40 762 321 762</p>
-                <p>Mon - Fri, 8:00-22:00</p>
-              </div>
-            </div>
-          </div>
-        </div>
+    <Html as='div' center style={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+      <span className='canvas-loader'></span>
+      <p style={{ fontSize: 14, color: "#F1F1F1", fontWeight: 800, marginTop: 40 }}>{progress.toFixed(2)}%</p>
+    </Html>
+  );
+};
 
-        {/* Right Section */}
-        <div className="bg-white p-8 rounded-r-lg w-1/2 flex flex-col justify-center">
-          <h2 className="text-2xl font-bold mb-6">Contact us</h2>
-          <form className="space-y-4">
-            <div className="flex space-x-4">
-              <input
-                type="text"
-                placeholder="First Name"
-                className="w-1/2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <input
-                type="text"
-                placeholder="Last Name"
-                className="w-1/2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <input
-              type="email"
-              placeholder="Email"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <textarea
-              placeholder="Message"
-              rows="4"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            <div className="flex items-start">
-              <input
-                type="checkbox"
-                id="privacy-policy"
-                className="h-4 w-4 mt-1"
-              />
-              <label htmlFor="privacy-policy" className="ml-2 text-sm">
-                You agree to our <a href="#" className="text-blue-500">Privacy Policy</a>.
-              </label>
-            </div>
-            <button
-              type="submit"
-              className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800"
-            >
-              SEND MESSAGE
-            </button>
-          </form>
-        </div>
-      </div>
+const Stars = () => {
+  const ref = useRef();
+  const [sphere] = useState(() => random.inSphere(new Float32Array(5000), { radius: 1.2 }));
+  useFrame((_, delta) => { ref.current.rotation.x -= delta / 10; ref.current.rotation.y -= delta / 15; });
+  return (
+    <group rotation={[0, 0, Math.PI / 4]}>
+      <Points ref={ref} positions={sphere} stride={3} frustumCulled>
+        <PointMaterial transparent color='#f272c8' size={0.002} sizeAttenuation depthWrite={false} />
+      </Points>
+    </group>
+  );
+};
+
+const StarsCanvas = () => (
+  <div className='w-full h-auto absolute inset-0 z-[-1]'>
+    <Canvas camera={{ position: [0, 0, 1] }}>
+      <Suspense fallback={null}>
+        <Stars />
+      </Suspense>
+      <Preload all />
+    </Canvas>
+  </div>
+);
+
+// Contact Form with Enhanced Gradient Styles
+const Contact = () => {
+  const formRef = useRef();
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    emailjs.send(import.meta.env.VITE_APP_EMAILJS_SERVICE_ID, import.meta.env.VITE_APP_EMAILJS_TEMPLATE_ID, {
+      from_name: form.name,
+      to_name: "JavaScript Mastery",
+      from_email: form.email,
+      to_email: "sujata@jsmastery.pro",
+      message: form.message,
+    }, import.meta.env.VITE_APP_EMAILJS_PUBLIC_KEY)
+      .then(() => {
+        setLoading(false);
+        alert("Thank you. I will get back to you as soon as possible.");
+        setForm({ name: "", email: "", message: "" });
+      }, (error) => {
+        setLoading(false);
+        console.error(error);
+        alert("Ahh, something went wrong. Please try again.");
+      });
+  };
+
+  return (
+    <div className="xl:mt-12 flex xl:flex-row xl:flex-[0.85] flex-col-reverse gap-10 overflow-hidden"
+      style={{ background: "linear-gradient(135deg, #1a237e, #42a5f5)", padding: "2rem", borderRadius: "12px" }}>
+      <motion.div variants={slideIn("left", "tween", 0.2, 1)} className='flex-[0.75] bg-opacity-70 bg-black p-8 rounded-2xl'>
+        <p className={`${styles.sectionSubText} text-light-blue-300`}>Get in touch</p>
+        <h3 className={`${styles.sectionHeadText} text-light-blue-100`}>Contact.</h3>
+        <form ref={formRef} onSubmit={handleSubmit} className='mt-12 flex flex-col gap-8'>
+          <label className='flex flex-col'>
+            <span className='text-white font-medium mb-4'>Your Name</span>
+            <input type='text' name='name' value={form.name} onChange={handleChange}
+              placeholder="What's your good name?" className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium' />
+          </label>
+          <label className='flex flex-col'>
+            <span className='text-white font-medium mb-4'>Your email</span>
+            <input type='email' name='email' value={form.email} onChange={handleChange}
+              placeholder="What's your web address?" className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium' />
+          </label>
+          <label className='flex flex-col'>
+            <span className='text-white font-medium mb-4'>Your Message</span>
+            <textarea rows={7} name='message' value={form.message} onChange={handleChange}
+              placeholder='What you want to say?' className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium' />
+          </label>
+          <button type='submit' className='bg-light-blue-500 py-3 px-8 rounded-xl outline-none w-fit text-white font-bold shadow-md shadow-primary'>
+            {loading ? "Sending..." : "Send"}
+          </button>
+        </form>
+      </motion.div>
+      <motion.div variants={slideIn("right", "tween", 0.2, 1)} className='xl:flex-1 xl:h-auto md:h-[550px] h-[350px]'>
+        <EarthCanvas />
+      </motion.div>
     </div>
   );
 };
 
-export default ContactUs;
+export default Contact;

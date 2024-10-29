@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { storage, storageRef, listAll, getDownloadURL, uploadBytes } from '../firebase'; // Import storage functions
+import { storage, storageRef, listAll, getDownloadURL } from '../firebase'; // Import storage functions
 import './Colleges.css';
 
-const Colleges = () => {
+const StaticColleges = () => {
   const [collegeData, setCollegeData] = useState([
     { name: 'College A', image: '/images/sethu4.png', description: 'Top-ranked for engineering.' },
     { name: 'College B', image: '/images/SETHU1.png', description: 'Leading in business education.' },
     { name: 'College C', image: '/images/sethu3.png', description: 'Known for innovation in arts.' },
     { name: 'College D', image: '/images/SETHU.png', description: 'Renowned for medical programs.' },
   ]);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [uploading, setUploading] = useState(false);
 
   // Fetch uploaded images on component mount
   useEffect(() => {
@@ -33,50 +31,12 @@ const Colleges = () => {
     fetchUploadedImages();
   }, []);
 
-  // Handle file selection
-  const handleFileChange = (e) => {
-    if (e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
-    }
-  };
-
-  // Handle file upload
-  const handleUpload = async () => {
-    if (!selectedFile) return;
-    setUploading(true);
-    try {
-      const fileRef = storageRef(storage, `colleges/${selectedFile.name}`);
-      await uploadBytes(fileRef, selectedFile);
-      const imageUrl = await getDownloadURL(fileRef);
-
-      // Update college data with new image
-      setCollegeData((prevData) => [
-        ...prevData,
-        { name: 'New College', image: imageUrl, description: 'Description for new college' },
-      ]);
-
-      alert("Image uploaded successfully!");
-    } catch (error) {
-      console.error("Error uploading image:", error);
-    }
-    setUploading(false);
-    setSelectedFile(null);
-  };
-
   return (
     <section className="colleges py-10 px-6">
       <h2 className="text-4xl font-bold mb-6 text-center">Colleges</h2>
       <p className="text-lg text-center max-w-2xl mx-auto mb-12">
         We partner with top colleges and universities to provide comprehensive training programs. Learn more about our partnerships and the benefits they offer to students.
       </p>
-
-      {/* Image upload input */}
-      <div className="upload-section text-center mb-8">
-        <input type="file" onChange={handleFileChange} />
-        <button onClick={handleUpload} disabled={uploading}>
-          {uploading ? "Uploading..." : "Upload Image"}
-        </button>
-      </div>
 
       <div className="logos">
         <div className="logos-slide">
@@ -106,4 +66,4 @@ const Colleges = () => {
   );
 };
 
-export default Colleges;
+export default StaticColleges;

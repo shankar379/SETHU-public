@@ -1,15 +1,22 @@
 /* Color Variables */
 :root {
-  --primary-color: #00ffcc; /* For glowing borders and text */
-  --secondary-color: #00aaff;
-  --bg-tertiary: #1f1f1f;
+  --primary-color: #6C3BA3; /* Violet highlights for text and shadows */
+  --secondary-color: #345781; /* Subtle blue glow */
+  --bg-dark-navy: #0A0D1A; /* Dark navy for the main background */
+  --bg-deep-blue: #1B3D5F; /* Deep blue for wave effect */
   --text-white: #ffffff;
   --text-secondary: #b0b0b0;
 }
 
 /* Achievements Section */
 .achievements-section {
-  background-color: var(--bg-tertiary);
+  background: linear-gradient(135deg, var(--bg-dark-navy) 20%, var(--bg-deep-blue) 80%);
+  width: 100vw; /* Full width */
+  min-height: 100vh; /* Full viewport height */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 50px 0;
 }
 
@@ -31,9 +38,9 @@
 .achievement-card {
   position: relative;
   border: 2px solid transparent;
-  background-color: var(--bg-tertiary);
+  background-color: var(--bg-dark-navy);
   border-radius: 20px;
-  box-shadow: 0 0 20px var(--primary-color);
+  box-shadow: 0 0 20px var(--primary-color), 0 0 40px var(--secondary-color);
   transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
@@ -65,4 +72,12 @@
   margin-top: 8px;
   font-weight: bold;
   text-shadow: 0px 0px 8px var(--primary-color);
+}
+
+/* Additional Styling for Responsive Layout */
+@media (max-width: 768px) {
+  .achievements-section {
+    padding: 30px 20px; /* Adjust padding for smaller screens */
+    min-height: auto; /* Allow natural height on mobile */
+  }
 }

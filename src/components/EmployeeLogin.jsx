@@ -40,7 +40,7 @@ const EmployeeLogin = ({ setLoggedInUser }) => {
     <div
       className="w-full flex items-center justify-center min-h-screen"
       style={{
-        background: 'linear-gradient(135deg, #EDA49D, #D1495B, #00798C, #30638E, #003D5B)',
+        background: 'linear-gradient(135deg, #0A0D1A, #1B3D5F, #6C3BA3, #2E2E48, #345781)',
       }}
     >
       <div className="w-full max-w-md mx-auto bg-white shadow-lg rounded-lg p-8">
@@ -53,7 +53,7 @@ const EmployeeLogin = ({ setLoggedInUser }) => {
             onChange={(e) => setEmployeeId(e.target.value)}
             placeholder="Employee ID"
             required
-            className="w-full p-3 bg-gray-100 text-gray-800 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#00798C]"
+            className="w-full p-3 bg-gray-100 text-gray-800 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#345781]"
           />
           <input
             type="password"
@@ -61,11 +61,11 @@ const EmployeeLogin = ({ setLoggedInUser }) => {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
             required
-            className="w-full p-3 bg-gray-100 text-gray-800 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#00798C]"
+            className="w-full p-3 bg-gray-100 text-gray-800 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#345781]"
           />
           <button
             type="submit"
-            className="w-full py-3 bg-[#D1495B] text-white font-semibold rounded-md hover:bg-[#B1374B] transition duration-200"
+            className="w-full py-3 bg-[#6C3BA3] text-white font-semibold rounded-md hover:bg-[#2E2E48] transition duration-200"
           >
             Login
           </button>

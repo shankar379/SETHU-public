@@ -1,18 +1,33 @@
+/* Global Reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body {
-  background: #f2f2f2;
+/* Root Color Variables */
+:root {
+  --primary-color: #6C3BA3; /* Violet highlights */
+  --secondary-color: #345781; /* Subtle blue glow */
+  --bg-dark-navy: #0A0D1A; /* Dark navy for background */
+  --bg-deep-blue: #1B3D5F; /* Deep blue */
+  --text-white: #ffffff;
+  --text-secondary: #b0b0b0;
 }
 
+body {
+  background: var(--bg-dark-navy);
+  color: var(--text-white);
+}
+
+/* Colleges Section */
 .colleges {
-  background: #fff;
+  background: linear-gradient(135deg, var(--bg-dark-navy), var(--bg-deep-blue));
   padding: 60px 0;
+  min-height: 100vh; /* Full viewport height on desktop */
   position: relative;
   overflow: hidden;
+  color: var(--text-white);
 }
 
 @keyframes slide {
@@ -37,16 +52,18 @@ body {
 
 .college-item {
   position: relative;
-  width: 300px; /* Increased width */
-  max-width: 100%; /* Ensures responsiveness */
-  margin: 0 30px; /* Increased margin for better spacing */
+  width: 300px;
+  max-width: 100%;
+  margin: 0 30px;
   text-align: center;
+  color: var(--text-white);
 }
 
 .college-item img {
   width: 100%;
   height: auto;
-  border-radius: 10px; /* Slightly larger border-radius */
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px var(--secondary-color);
 }
 
 .overlay {
@@ -54,9 +71,9 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.8); /* Lighter background */
-  color: #000; /* Black text */
-  padding: 12px; /* Increased padding */
+  background: rgba(0, 0, 0, 0.8);
+  color: var(--text-white);
+  padding: 12px;
   opacity: 0;
   transition: opacity 0.3s;
   border-radius: 10px;
@@ -68,13 +85,14 @@ body {
 
 .upload-button {
   padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--text-white);
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .upload-button:hover {
-  background-color: #0056b3;
+  background-color: var(--secondary-color);
 }

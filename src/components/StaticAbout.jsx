@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { database, ref, onValue } from '../firebase'; // Import Firebase Database
+import { FaBullseye, FaEye, FaLaptopCode, FaRocket } from 'react-icons/fa';
 
 const StaticAbout = () => {
   const [missionText, setMissionText] = useState('');
@@ -21,33 +22,44 @@ const StaticAbout = () => {
   }, []);
 
   return (
-    <section className="w-full min-h-screen bg-gradient-to-b from-gray-900 to-black text-white p-12 flex flex-col items-center">
-      <h2 className="text-5xl font-bold mb-12 text-center text-yellow-400">About Us</h2>
-
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-6xl animate-fadeIn delay-100">
+    <section
+      className="relative bg-gradient-to-r from-[#002D62] to-[#008080] text-white min-h-screen w-full flex items-center justify-center"
+      style={{
+        backgroundImage: "url('/images/herobg.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      {/* Main Content Container */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 w-full max-w-5xl p-10 rounded-3xl shadow-xl bg-white bg-opacity-30">
+        
         {/* Mission Section */}
-        <div className="p-6 bg-gray-800 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105">
-          <h3 className="text-3xl font-semibold text-center mb-4 text-blue-300">Mission</h3>
-          <p className="text-lg text-gray-400 leading-relaxed text-center">{missionText}</p>
+        <div className="p-8 bg-white bg-opacity-70 rounded-xl shadow-lg hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center">
+          <FaBullseye className="text-blue-600 text-5xl mb-4" />
+          <h3 className="text-3xl font-semibold mb-3 text-gray-900">Mission</h3>
+          <p className="text-lg text-gray-700 leading-relaxed">{missionText}</p>
         </div>
 
         {/* Vision Section */}
-        <div className="p-6 bg-gray-800 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105">
-          <h3 className="text-3xl font-semibold text-center mb-4 text-blue-300">Vision</h3>
-          <p className="text-lg text-gray-400 leading-relaxed text-center">{visionText}</p>
+        <div className="p-8 bg-white bg-opacity-70 rounded-xl shadow-lg hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center">
+          <FaEye className="text-purple-600 text-5xl mb-4" />
+          <h3 className="text-3xl font-semibold mb-3 text-gray-900">Vision</h3>
+          <p className="text-lg text-gray-700 leading-relaxed">{visionText}</p>
         </div>
 
         {/* Programs Section */}
-        <div className="p-6 bg-gray-800 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105 md:col-span-2">
-          <h3 className="text-3xl font-semibold text-center mb-4 text-yellow-400">Programs</h3>
-          <p className="text-lg text-gray-400 leading-relaxed text-center">{programs}</p>
+        <div className="md:col-span-2 p-8 bg-white bg-opacity-70 rounded-xl shadow-lg hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center">
+          <FaRocket className="text-teal-600 text-5xl mb-4" />
+          <h3 className="text-3xl font-semibold mb-3 text-gray-900">Programs</h3>
+          <p className="text-lg text-gray-700 leading-relaxed">{programs}</p>
         </div>
 
         {/* Platforms Section */}
-        <div className="p-6 bg-gray-800 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:scale-105 md:col-span-2">
-          <h3 className="text-3xl font-semibold text-center mb-4 text-yellow-400">Platforms</h3>
-          <p className="text-lg text-gray-400 leading-relaxed text-center">{platformsText}</p>
+        <div className="md:col-span-2 p-8 bg-white bg-opacity-70 rounded-xl shadow-lg hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center">
+          <FaLaptopCode className="text-pink-600 text-5xl mb-4" />
+          <h3 className="text-3xl font-semibold mb-3 text-gray-900">Platforms</h3>
+          <p className="text-lg text-gray-700 leading-relaxed">{platformsText}</p>
         </div>
       </div>
     </section>

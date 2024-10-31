@@ -5,7 +5,9 @@ import Registration from './components/registration';
 import SethuDynamic from './components/sethu_dynamic';
 import EmployeeLogin from './components/EmployeeLogin'; // Import EmployeeLogin
 import EmployeeProfile from './components/EmployeeProfile'; // Import EmployeeProfile
-import ReviewPage from './components/StaticAbout';
+import ReviewPage from './components/ReviewPage';
+import SethuStatic from './components/sethu_Static';
+
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Manage login status
@@ -14,7 +16,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
+        <Route path="/" element={<SethuStatic/>} />
         <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
         <Route path="/register" element={<Registration />} />
 

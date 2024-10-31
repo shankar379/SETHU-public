@@ -1,0 +1,74 @@
+/* General Styles */
+#reviews {
+    padding: 50px;
+    background: linear-gradient(to right, #001f3f, #001233); /* Dark navy blue gradient */
+    overflow: hidden;
+}
+
+.reviews-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    overflow: hidden;
+    height: 500px;
+}
+
+.lane {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+}
+
+.review-card {
+    width: 300px;
+    min-height: 180px;
+    background: linear-gradient(to bottom right, #001233, #3b4d61); /* Dark navy to lighter navy */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 25px; /* Rounded corners */
+    overflow: hidden;
+    text-align: left;
+    font-family: Arial, sans-serif;
+    transition: transform 0.3s ease;
+}
+
+.review-card:hover {
+    transform: scale(1.05);
+}
+
+.review-card p {
+    margin: 0;
+    color: #ffffff; /* White text for better contrast */
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.review-card strong {
+    display: block;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #e0e0e0; /* Light gray for the author's name */
+}
+
+/* Animations for desktop vertical scrolling */
+.lane-up {
+    animation: scrollUp 22s linear infinite;
+}
+
+.lane-down {
+    animation: scrollDown 22s linear infinite;
+}
+
+@keyframes scrollUp {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-100%); }
+}
+
+@keyframes scrollDown {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(0); }
+}
+
+/* Mobile view */
+/* Infinite Scrolling Animations */

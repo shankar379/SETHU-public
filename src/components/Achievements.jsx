@@ -49,13 +49,13 @@ const Achievements = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio === 1) {
+          if (entry.isIntersecting) {
             setStartCounting(true);
             observer.disconnect(); // Stop observing after entering the viewport
           }
         });
       },
-      { threshold: 1 }
+      { threshold: 0.85 } // Trigger when 85% of section is in view
     );
 
     if (sectionRef.current) {

@@ -66,10 +66,10 @@ const Achievements = () => {
   }, []);
 
   const achievementsData = [
-    { title: 'Projects Completed', target: 120, icon: '/public/SETHU.png' },
-    { title: 'Happy Clients', target: 75, icon: '/public/SETHU.png' },
-    { title: 'Awards Won', target: 10, icon: '/public/SETHU.png' },
-    { title: 'Years Experience', target: 5, icon: '/public/SETHU.png' },
+    { title: 'Projects Completed', target: 120, icon: '/SETHU.png' },
+    { title: 'Happy Clients', target: 75, icon: '/SETHU.png' },
+    { title: 'Awards Won', target: 10, icon: '/SETHU.png' },
+    { title: 'Years Experience', target: 5, icon: '/SETHU.png' },
   ];
 
   return (

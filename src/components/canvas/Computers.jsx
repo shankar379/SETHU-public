@@ -1,78 +1,79 @@
-import React, { Suspense, useEffect, useState } from "react";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Preload, useGLTF } from "@react-three/drei";
+import React, { useState, useEffect } from 'react';
+import { database, ref, onValue } from '../firebase';
+import { FaBullseye, FaEye, FaLaptopCode, FaRocket } from 'react-icons/fa';
+import ComputersCanvas from './ComputersCanvas'; // Import the 3D model component
 
-import CanvasLoader from "../Loader";
-
-const Computers = ({ isMobile }) => {
-  const computer = useGLTF("./desktop_pc/scene.gltf");
-
-  return (
-    <mesh>
-      <hemisphereLight intensity={0.15} groundColor='black' />
-      <spotLight
-        position={[-20, 50, 10]}
-        angle={0.12}
-        penumbra={1}
-        intensity={1}
-        castShadow
-        shadow-mapSize={1024}
-      />
-      <pointLight intensity={1} />
-      <primitive
-        object={computer.scene}
-        scale={isMobile ? 0.7 : 0.75}
-        position={isMobile ? [0, -3, -2.2] : [0, -3.25, -1.5]}
-        rotation={[-0.01, -0.2, -0.1]}
-      />
-    </mesh>
-  );
-};
-
-const ComputersCanvas = () => {
-  const [isMobile, setIsMobile] = useState(false);
+const StaticAbout = () => {
+  const [missionText, setMissionText] = useState('');
+  const [visionText, setVisionText] = useState('');
+  const [programs, setPrograms] = useState('');
+  const [platformsText, setPlatformsText] = useState('');
 
   useEffect(() => {
-    // Add a listener for changes to the screen size
-    const mediaQuery = window.matchMedia("(max-width: 500px)");
-
-    // Set the initial value of the `isMobile` state variable
-    setIsMobile(mediaQuery.matches);
-
-    // Define a callback function to handle changes to the media query
-    const handleMediaQueryChange = (event) => {
-      setIsMobile(event.matches);
-    };
-
-    // Add the callback function as a listener for changes to the media query
-    mediaQuery.addEventListener("change", handleMediaQueryChange);
-
-    // Remove the listener when the component is unmounted
-    return () => {
-      mediaQuery.removeEventListener("change", handleMediaQueryChange);
-    };
+    const aboutRef = ref(database, 'about/');
+    onValue(aboutRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        setMissionText(data.missionText || '');
+        setVisionText(data.visionText || '');
+        setPrograms(data.programs || '');
+        setPlatformsText(data.platformsText || '');
+      }
+    });
   }, []);
 
   return (
-    <Canvas
-      frameloop='demand'
-      shadows
-      dpr={[1, 2]}
-      camera={{ position: [20, 3, 5], fov: 25 }}
-      gl={{ preserveDrawingBuffer: true }}
+    <section
+      className="relative bg-gradient-to-r from-[#002D62] to-[#008080] text-white min-h-screen w-full flex items-start justify-end"
+      style={{
+        backgroundImage: "url('/images/herobg.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
     >
-      <Suspense fallback={<CanvasLoader />}>
-        <OrbitControls
-          enableZoom={false}
-          maxPolarAngle={Math.PI / 2}
-          minPolarAngle={Math.PI / 2}
-        />
-        <Computers isMobile={isMobile} />
-      </Suspense>
+      {/* Main Content Container with a left gap */}
+      <div className="w-full max-w-5xl p-10 rounded-3xl shadow-xl bg-white bg-opacity-30 ml-auto mr-8 flex flex-col items-start">
+        
+        {/* 3D Model Canvas */}
+        <div className="w-full h-96 mb-10">
+          <ComputersCanvas />
+        </div>
 
-      <Preload all />
-    </Canvas>
+        {/* Grid container */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 w-full">
+          
+          {/* Mission Section */}
+          <div className="p-8 bg-white bg-opacity-70 rounded-xl shadow-lg hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center">
+            <FaBullseye className="text-blue-600 text-5xl mb-4" />
+            <h3 className="text-3xl font-semibold mb-3 text-gray-900">Mission</h3>
+            <p className="text-lg text-gray-700 leading-relaxed">{missionText}</p>
+          </div>
+
+          {/* Vision Section */}
+          <div className="p-8 bg-white bg-opacity-70 rounded-xl shadow-lg hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center">
+            <FaEye className="text-purple-600 text-5xl mb-4" />
+            <h3 className="text-3xl font-semibold mb-3 text-gray-900">Vision</h3>
+            <p className="text-lg text-gray-700 leading-relaxed">{visionText}</p>
+          </div>
+
+          {/* Programs Section */}
+          <div className="md:col-span-2 p-8 bg-white bg-opacity-70 rounded-xl shadow-lg hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center">
+            <FaRocket className="text-teal-600 text-5xl mb-4" />
+            <h3 className="text-3xl font-semibold mb-3 text-gray-900">Programs</h3>
+            <p className="text-lg text-gray-700 leading-relaxed">{programs}</p>
+          </div>
+
+          {/* Platforms Section */}
+          <div className="md:col-span-2 p-8 bg-white bg-opacity-70 rounded-xl shadow-lg hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center">
+            <FaLaptopCode className="text-pink-600 text-5xl mb-4" />
+            <h3 className="text-3xl font-semibold mb-3 text-gray-900">Platforms</h3>
+            <p className="text-lg text-gray-700 leading-relaxed">{platformsText}</p>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 };
 
-export default ComputersCanvas;
+export default StaticAbout;

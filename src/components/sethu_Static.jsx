@@ -1,37 +1,65 @@
-// SethuDynamic.jsx
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import StaticNav from './StaticNav';
 import StaticAbout from './StaticAbout';
 import ContactUs from './ContactUs';
 import Colleges from './StaticColleges';
-import StaticReviews from './StaticReviews'
+import StaticReviews from './StaticReviews';
 import Achievements from './Achievements';
 import Home from './Home';
 
-const SethuDynamic = () => {
+const SethuStatic = () => {
+  const sectionsRef = useRef([]);
+  const [activeLink, setActiveLink] = useState('');
+
+  // Handle section change and set active link
+  const handleSectionChange = (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        setActiveLink(entry.target.id); // Update active link based on section id
+      }
+    });
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleSectionChange, {
+      threshold: 0.4, // Adjust threshold as necessary
+    });
+
+    // Observe each section
+    sectionsRef.current.forEach((section) => {
+      if (section) observer.observe(section);
+    });
+
+    return () => {
+      sectionsRef.current.forEach((section) => {
+        if (section) observer.unobserve(section);
+      });
+    };
+  }, []);
+
   return (
     <div className="w-screen h-screen bg-gradient-to-r from-blue-900 to-gray-900 text-white">
-      {/* Use Nav Component */}
-      <StaticNav />
+      {/* Pass active link and setActiveLink function to StaticNav */}
+      <StaticNav activeLink={activeLink} />
 
       {/* Sections with corresponding IDs and full height */}
       <div className="w-full">
-        <section id="home" className="min-h-screen flex justify-center items-center">
+        <section ref={(el) => (sectionsRef.current[0] = el)} id="home" className="min-h-screen flex justify-center items-center">
           <Home />
         </section>
-        <section id="about" className="min-h-screen flex justify-center items-center">
+        <section ref={(el) => (sectionsRef.current[1] = el)} id="about" className="min-h-screen flex justify-center items-center">
           <StaticAbout />
         </section>
-        <section id="achievements" className="min-h-screen flex justify-center items-center">
+        <section ref={(el) => (sectionsRef.current[2] = el)} id="achievements" className="min-h-screen flex justify-center items-center">
           <Achievements />
         </section>
-        <section id="colleges" className="min-h-screen flex justify-center items-center">
+        <section ref={(el) => (sectionsRef.current[3] = el)} id="colleges" className="min-h-screen flex justify-center items-center">
           <Colleges />
         </section>
-        <section id="StaticReviews" className="min-h-screen flex justify-center items-center">
+        <section ref={(el) => (sectionsRef.current[4] = el)} id="StaticReviews" className="min-h-screen flex justify-center items-center">
           <StaticReviews />
         </section>
-        <section id="contact" className="min-h-screen flex justify-center items-center">
+        <section ref={(el) => (sectionsRef.current[5] = el)} id="contact" className="min-h-screen flex justify-center items-center">
           <ContactUs />
         </section>
       </div>
@@ -39,4 +67,4 @@ const SethuDynamic = () => {
   );
 };
 
-export default SethuDynamic;
+export default SethuStatic;

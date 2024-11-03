@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Tilt } from 'react-tilt';
 import { motion } from 'framer-motion';
-import './Achievements.css'; // Import your custom CSS for additional styling
+import confetti from 'canvas-confetti';
+import './Achievements.css';
 import { fadeIn } from '../utils/motion';
 
-// Counter component for animated counting
 const Counter = ({ target, startCount }) => {
   const [count, setCount] = useState(0);
 
@@ -13,7 +13,7 @@ const Counter = ({ target, startCount }) => {
       const increment = () => {
         setCount((prev) => Math.min(prev + Math.ceil(target / 100), target));
       };
-      const interval = setInterval(increment, 20); // Speed can be adjusted here
+      const interval = setInterval(increment, 20);
       return () => clearInterval(interval);
     }
   }, [startCount, target]);
@@ -21,7 +21,6 @@ const Counter = ({ target, startCount }) => {
   return <span>{count}</span>;
 };
 
-// Achievements card component
 const AchievementCard = ({ title, target, icon, index, startCounting }) => (
   <motion.div variants={fadeIn("up", "spring", index * 0.5, 0.75)}>
     <Tilt
@@ -51,11 +50,20 @@ const Achievements = () => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setStartCounting(true);
+
+            // Trigger confetti blast effect
+            confetti({
+              particleCount: 100,
+              spread: 70,
+              origin: { y: 0.7 },
+              colors: ['#FF4500', '#FF8C00', '#FFD700', '#32CD32', '#00CED1'],
+            });
+
             observer.disconnect(); // Stop observing after entering the viewport
           }
         });
       },
-      { threshold: 0.85 } // Trigger when 85% of section is in view
+      { threshold: 0.8 } // Trigger when 80% of section is in view
     );
 
     if (sectionRef.current) {
@@ -66,9 +74,9 @@ const Achievements = () => {
   }, []);
 
   const achievementsData = [
-    { title: 'Projects Completed', target: 120, icon: '/SETHU.png' },
-    { title: 'Happy Clients', target: 75, icon: '/SETHU.png' },
-    { title: 'Awards Won', target: 10, icon: '/SETHU.png' },
+    { title: 'Teached Colleges', target: 120, icon: '/SETHU.png' },
+    { title: 'Projects Complated', target: 75, icon: '/SETHU.png' },
+    { title: 'Job No.of Students', target: 1000, icon: '/SETHU.png' },
     { title: 'Years Experience', target: 5, icon: '/SETHU.png' },
   ];
 

@@ -1,7 +1,5 @@
 import React from 'react';
-import './StaticReviews.css'; // Import the CSS file for styling
-
-// src/components/Reviews.jsx
+import './StaticReviews.css';
 
 const StaticReviews = () => {
   const reviews = [
@@ -13,11 +11,10 @@ const StaticReviews = () => {
     { text: "Clear explanations, and I loved how interactive the course was. The projects were challenging but fun!", author: "Laura Green" },
     { text: "This course is a must for anyone wanting to get a comprehensive understanding of the subject. Truly an eye-opener!", author: "Ashley Brown" },
     { text: "The instructor was very patient and explained things in a way that was easy to understand. I gained so much confidence.", author: "Chris Evans" },
-    
   ];
 
   return (
-    <section id="reviews">
+    <section id="StaticReviews" className="min-h-screen flex justify-center items-center">
       <div className="w-full reviews-container">
         <div className="lane lane-up">
           {reviews.concat(reviews).map((review, index) => (

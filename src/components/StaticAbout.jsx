@@ -6,19 +6,18 @@ import { FaBullseye, FaEye, FaLaptopCode, FaRocket } from 'react-icons/fa';
 
 // Component to load the desktop model with oscillation animation
 const DesktopPC = () => {
-  const { scene } = useGLTF('/desktop_pc/scene.gltf');
+  const { scene } = useGLTF('/DESKTOP/scene.gltf');
   const [yPosition, setYPosition] = useState(0);
 
   useFrame(({ clock }) => {
-    // Update y position to oscillate up and down
     setYPosition(Math.sin(clock.getElapsedTime()) * 0.05);
   });
 
   return (
     <primitive
       object={scene}
-      scale={0.2}
-      position={[0, yPosition - 0.5, 0]} // Apply oscillation on y-axis
+      scale={window.innerWidth < 768 ? 0.59 : 0.3} // Scale down for mobile screens
+      position={[0, yPosition - 0.5, 0]}
       rotation={[0, Math.PI / -2, 0]}
     />
   );
@@ -33,6 +32,22 @@ const Loader = () => {
     </Html>
   );
 };
+
+// Reusable Section Component
+const Section = ({ icon, title, content, fullWidth }) => (
+  <div className={`p-4 bg-white bg-opacity-70 rounded-xl shadow-lg ${fullWidth ? 'w-full' : 'w-1/2'} flex flex-col items-center text-center`}>
+    {icon}
+    <h3 className="text-2xl font-semibold mb-2 text-gray-900">{title}</h3>
+    <p className="text-base text-gray-700 leading-relaxed">{content}</p>
+  </div>
+);
+
+// Wrapper for the section to control layout
+const SectionWrapper = ({ title, content, icon }) => (
+  <div className="flex-1 flex items-center justify-center p-4">
+    <Section title={title} content={content} icon={icon} />
+  </div>
+);
 
 // Main StaticAbout component
 const StaticAbout = () => {
@@ -56,7 +71,7 @@ const StaticAbout = () => {
 
   return (
     <section
-      className="flex min-h-screen w-full text-white bg-gradient-to-r from-[#002D62] to-[#008080]"
+      className="flex flex-col w-full text-white bg-gradient-to-r from-[#002D62] to-[#008080]"
       style={{
         backgroundImage: "url('/images/bg.WebP')",
         backgroundSize: "cover",
@@ -64,45 +79,62 @@ const StaticAbout = () => {
         backgroundRepeat: "no-repeat",
       }}
     >
-      {/* Left Half - 3D Model Canvas */}
-      <div className="w-1/2 flex items-center justify-center">
-        <Canvas camera={{ position: [0, 0, 2.5] }}>
+      {/* 3D Model Canvas */}
+      <div className="flex items-center justify-center h-1/2 lg:h-[70vh] w-full">
+        <Canvas camera={{ position: [0, 0, 2.5] }} className="min-h-[250px] lg:min-h-[500px] h-full">
           <Suspense fallback={<Loader />}>
-            <OrbitControls enableZoom={false} />
+            <OrbitControls 
+              enableZoom={false} 
+              maxPolarAngle={Math.PI / 2} 
+              minPolarAngle={Math.PI / 2} 
+            />
             <ambientLight intensity={0.3} />
-            <directionalLight position={[0, 5, 5]} intensity={1} />
+            <directionalLight position={[0, 5, 5]} intensity={2} />
             <DesktopPC />
             <Preload all />
           </Suspense>
         </Canvas>
       </div>
 
-      {/* Right Side - Firebase Text Content */}
-      <div className="w-1/2 flex items-center justify-center">
-        <div className="w-3/4 bg-white bg-opacity-30 rounded-xl shadow-xl p-4">
-          <div className="grid grid-cols-1 gap-6">
-            {/* Mission Section */}
-            <Section icon={<FaBullseye className="text-blue-600 text-4xl mb-2" />} title="Mission" content={missionText} />
-            {/* Vision Section */}
-            <Section icon={<FaEye className="text-purple-600 text-4xl mb-2" />} title="Vision" content={visionText} />
-            {/* Programs Section */}
-            <Section icon={<FaRocket className="text-teal-600 text-4xl mb-2" />} title="Programs" content={programs} />
-            {/* Platforms Section */}
-            <Section icon={<FaLaptopCode className="text-pink-600 text-4xl mb-2" />} title="Platforms" content={platformsText} />
-          </div>
-        </div>
+      {/* Mission and Vision Section */}
+      <div className="w-full flex flex-col lg:flex-row px-4">
+        <SectionWrapper 
+          title="Mission" 
+          content={missionText} 
+          icon={<FaBullseye className="text-blue-600 text-4xl mb-2" />} 
+        />
+        <SectionWrapper 
+          title="Vision" 
+          content={visionText} 
+          icon={<FaEye className="text-purple-600 text-4xl mb-2" />} 
+        />
       </div>
+
+      {/* Programs and Platforms Sections */}
+<div className="w-full px-8"> {/* Added padding on both sides */}
+  {/* Programs Section */}
+  <div className="mt-10 w-full px-4">
+    <Section 
+      title="Programs" 
+      content={programs} 
+      icon={<FaRocket className="text-teal-600 text-4xl mb-2" />} 
+      fullWidth 
+    />
+  </div>
+
+  {/* Platforms Section */}
+  <div className="mt-10 w-full px-4">
+    <Section 
+      title="Platforms" 
+      content={platformsText} 
+      icon={<FaLaptopCode className="text-pink-600 text-4xl mb-2" />} 
+      fullWidth 
+    />
+  </div>
+</div>
+
     </section>
   );
 };
-
-// Reusable Section Component
-const Section = ({ icon, title, content }) => (
-  <div className="p-4 bg-white bg-opacity-70 rounded-xl shadow-lg hover:scale-105 transform transition-all duration-300 flex flex-col items-center text-center">
-    {icon}
-    <h3 className="text-2xl font-semibold mb-2 text-gray-900">{title}</h3>
-    <p className="text-base text-gray-700 leading-relaxed">{content}</p>
-  </div>
-);
 
 export default StaticAbout;

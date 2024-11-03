@@ -1,7 +1,8 @@
 /* General Styles */
-#reviews {
+/* General Styles */
+#StaticReviews {
     padding: 50px;
-    background: linear-gradient(to right, #001f3f, #001233); /* Dark navy blue gradient */
+    background: linear-gradient(to bottom, #012a4a, #0a0e1a); /* Red background */
     overflow: hidden;
 }
 
@@ -12,6 +13,9 @@
     overflow: hidden;
     height: 500px;
 }
+
+/* Other existing styles remain unchanged */
+
 
 .lane {
     display: flex;

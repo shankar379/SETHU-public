@@ -10,7 +10,8 @@
 
 /* Achievements Section */
 .achievements-section {
-  background: linear-gradient(135deg, var(--bg-dark-navy) 20%, var(--bg-deep-blue) 80%);
+  background: linear-gradient(to bottom,#1a193b , #0f1c2f);
+  /*background: linear-gradient(135deg, var(--bg-dark-navy) 20%, var(--bg-deep-blue) 80%);*/
   width: 100vw; /* Full width */
   min-height: 100vh; /* Full viewport height */
   display: flex;

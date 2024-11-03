@@ -6,7 +6,7 @@ import { FaBullseye, FaEye, FaLaptopCode, FaRocket } from 'react-icons/fa';
 
 // Component to load the desktop model with oscillation animation
 const DesktopPC = () => {
-  const { scene } = useGLTF('/DESKTOP/scene.gltf');
+  const { scene } = useGLTF('/ff/desktop.gltf');
   const [yPosition, setYPosition] = useState(0);
 
   useFrame(({ clock }) => {
@@ -90,6 +90,11 @@ const StaticAbout = () => {
             />
             <ambientLight intensity={0.3} />
             <directionalLight position={[0, 5, 5]} intensity={2} />
+            <directionalLight position={[5, 5, 5]} intensity={1.5} />  // Light to the right
+            {/*<directionalLight position={[0, 5, 10]} intensity={1.5} /> // Light in front*/}
+            <directionalLight position={[3.5, 5, 8.5]} intensity={2} />  {/*// Diagonal front-right*/}
+            <directionalLight position={[3.5, 5, 1.5]} intensity={0.5} />  {/*// Diagonal back-right*/}
+
             <DesktopPC />
             <Preload all />
           </Suspense>

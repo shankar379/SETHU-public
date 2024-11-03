@@ -3,9 +3,7 @@
 @tailwind utilities;
 
 /* Add this CSS rule */
-body {
-  scroll-behavior: smooth; /* Ensure smooth scrolling in modern browsers */
-}
+
 
 #root {
   max-width: 1280px;

@@ -1,34 +1,58 @@
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import './Profile.css';
 
 const Profile = () => {
+  const [visibleSections, setVisibleSections] = useState([]);
+
   const profiles = [
     {
-      name: "John Doe",
-      picture: "images/rr.png",
+      name: "Ram Lal Suresh",
+      picture: "images/Profile1.png",
       details: [
-        "Software Engineer with a focus on innovative solutions.",
-        "Experienced in front-end and back-end development.",
-        "Passionate about continuous learning and improvement.",
+        "Chief Administrator at SETHU with a vision for enhancing skills.",
+        "Over 10 years of experience in organizational management.",
+        "Dedicated to creating impactful training programs for growth."
       ],
       picturePosition: "left",
     },
     {
-      name: "Jane Smith",
-      picture: "images/rr.png",
+      name: "Sanju",
+      picture: "images/Profile1.png",
       details: [
-        "Data Scientist specializing in AI and Machine Learning.",
-        "Proficient in Python, R, and data visualization tools.",
-        "Committed to leveraging data for impactful insights.",
+        "Senior Trainer and Program Coordinator at SETHU.",
+        "Expert in skill development and hands-on learning strategies.",
+        "Passionate about helping individuals unlock their potential."
       ],
       picturePosition: "right",
     },
   ];
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleSections((prev) => [...prev, entry.target.id]);
+          }
+        });
+      },
+      { threshold: 0.7 } // Trigger when 70% of the element is in view
+    );
+
+    const sections = document.querySelectorAll('.profile-section');
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="profile-container">
       {profiles.map((profile, index) => (
-        <div className="profile-section" key={index}>
+        <div
+          id={`section-${index}`}
+          className={`profile-section ${visibleSections.includes(`section-${index}`) ? 'animate' : ''}`}
+          key={index}
+        >
           {profile.picturePosition === "left" && (
             <div
               className="profile-picture slide-in-left"

@@ -5,7 +5,7 @@ import Registration from './components/registration';
 import SethuDynamic from './components/sethu_dynamic';
 import EmployeeLogin from './components/EmployeeLogin'; // Import EmployeeLogin
 import EmployeeProfile from './components/EmployeeProfile'; // Import EmployeeProfile
-import ReviewPage from './components/ReviewPage';
+import ReviewPage from './components/Profile';
 import SethuStatic from './components/sethu_Static';
 
 

@@ -6,6 +6,7 @@ import Colleges from './StaticColleges';
 import StaticReviews from './StaticReviews';
 import Achievements from './Achievements';
 import Home from './Home';
+import Profile from './Profile';
 
 const SethuStatic = () => {
   const sectionsRef = useRef([]);
@@ -50,16 +51,19 @@ const SethuStatic = () => {
         <section ref={(el) => (sectionsRef.current[1] = el)} id="about" className="min-h-screen flex justify-center items-center">
           <StaticAbout />
         </section>
-        <section ref={(el) => (sectionsRef.current[2] = el)} id="achievements" className="min-h-screen flex justify-center items-center">
+        <section ref={(el) => (sectionsRef.current[1] = el)} id="profile" className="min-h-screen flex justify-center items-center">
+          <Profile />
+        </section>
+        <section ref={(el) => (sectionsRef.current[3] = el)} id="achievements" className="min-h-screen flex justify-center items-center">
           <Achievements />
         </section>
-        <section ref={(el) => (sectionsRef.current[3] = el)} id="colleges" className="min-h-screen flex justify-center items-center">
+        <section ref={(el) => (sectionsRef.current[4] = el)} id="colleges" className="min-h-screen flex justify-center items-center">
           <Colleges />
         </section>
-        <section ref={(el) => (sectionsRef.current[4] = el)} id="StaticReviews" className="min-h-screen flex justify-center items-center">
+        <section ref={(el) => (sectionsRef.current[5] = el)} id="StaticReviews" className="min-h-screen flex justify-center items-center">
           <StaticReviews />
         </section>
-        <section ref={(el) => (sectionsRef.current[5] = el)} id="contact" className="min-h-screen flex justify-center items-center">
+        <section ref={(el) => (sectionsRef.current[6] = el)} id="contact" className="min-h-screen flex justify-center items-center">
           <ContactUs />
         </section>
       </div>

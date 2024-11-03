@@ -16,7 +16,7 @@ const DesktopPC = () => {
   return (
     <primitive
       object={scene}
-      scale={window.innerWidth < 768 ? 0.59 : 0.3} // Scale down for mobile screens
+      scale={window.innerWidth < 768 ? 0.19 : 0.3} // Scale down for mobile screens
       position={[0, yPosition - 0.5, 0]}
       rotation={[0, Math.PI / -2, 0]}
     />
@@ -35,7 +35,7 @@ const Loader = () => {
 
 // Reusable Section Component
 const Section = ({ icon, title, content, fullWidth }) => (
-  <div className={`p-4 bg-white bg-opacity-70 rounded-xl shadow-lg ${fullWidth ? 'w-full' : 'w-1/2'} flex flex-col items-center text-center`}>
+  <div className={`p-4 bg-white bg-opacity-70 rounded-xl shadow-lg ${fullWidth ? 'w-full' : 'w-90'} flex flex-col items-center text-center`}>
     {icon}
     <h3 className="text-2xl font-semibold mb-2 text-gray-900">{title}</h3>
     <p className="text-base text-gray-700 leading-relaxed">{content}</p>
@@ -44,7 +44,7 @@ const Section = ({ icon, title, content, fullWidth }) => (
 
 // Wrapper for the section to control layout
 const SectionWrapper = ({ title, content, icon }) => (
-  <div className="flex-1 flex items-center justify-center p-4">
+  <div className="w-full flex-1 justify-center items-center flex p-8">
     <Section title={title} content={content} icon={icon} />
   </div>
 );

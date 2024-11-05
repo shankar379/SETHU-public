@@ -1,13 +1,12 @@
 /* General styles for the Contact component */
 .contact-container {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   gap: 10px;
   overflow: hidden;
   background: linear-gradient(135deg, #0D1B4C, #1A237E, #0B072A);
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
 }
 
 /* Styles for the contact details section */
@@ -67,13 +66,15 @@
     padding: 1rem; /* Less padding on mobile */
   }
 
+  .earth-canvas {
+    height: 350px; /* Specific height for mobile */
+    flex: 1; /* Allow the canvas to grow */
+  }
+
   .contact-details {
     flex: 1; /* Full width */
     padding: 1rem;
     background-color: rgba(0, 0, 0, 0.9); /* Add dark background for mobile */
-  }
-
-  .earth-canvas {
-    height: 350px; /* Specific height for mobile */
+    margin-top: 20px; /* Space between canvas and contact details */
   }
 }

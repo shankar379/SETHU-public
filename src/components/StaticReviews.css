@@ -1,8 +1,7 @@
 /* General Styles */
-/* General Styles */
 #StaticReviews {
     padding: 50px;
-    background: linear-gradient(to bottom, #012a4a, #0a0e1a); /* Red background */
+    background: linear-gradient(to bottom, #012a4a, #0a0e1a);
     overflow: hidden;
 }
 
@@ -12,10 +11,8 @@
     gap: 20px;
     overflow: hidden;
     height: 500px;
+    width: 100%; /* Ensures full width on mobile */
 }
-
-/* Other existing styles remain unchanged */
-
 
 .lane {
     display: flex;
@@ -25,12 +22,13 @@
 }
 
 .review-card {
-    width: 300px;
+    width: 100%; /* Full width for mobile responsiveness */
+    max-width: 300px; /* Limit max width for larger screens */
     min-height: 180px;
-    background: linear-gradient(to bottom right, #001233, #3b4d61); /* Dark navy to lighter navy */
+    background: linear-gradient(to bottom right, #001233, #3b4d61);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     padding: 20px;
-    border-radius: 25px; /* Rounded corners */
+    border-radius: 25px;
     overflow: hidden;
     text-align: left;
     font-family: Arial, sans-serif;
@@ -43,19 +41,19 @@
 
 .review-card p {
     margin: 0;
-    color: #ffffff; /* White text for better contrast */
-    font-size: 16px;
-    line-height: 1.5;
+    color: #ffffff;
+    font-size: 14px; /* Slightly reduced for mobile */
+    line-height: 1.4;
 }
 
 .review-card strong {
     display: block;
     margin-top: 10px;
-    font-size: 14px;
-    color: #e0e0e0; /* Light gray for the author's name */
+    font-size: 12px; /* Reduced font size for author */
+    color: #e0e0e0;
 }
 
-/* Animations for desktop vertical scrolling */
+/* Animations */
 .lane-up {
     animation: scrollUp 22s linear infinite;
 }
@@ -74,5 +72,19 @@
     100% { transform: translateY(0); }
 }
 
-/* Mobile view */
-/* Infinite Scrolling Animations */
+/* Mobile-specific adjustments */
+@media (max-width: 768px) {
+    #StaticReviews {
+        padding: 20px; /* Optional: Reduce padding on mobile */
+    }
+
+    .reviews-container {
+        gap: 10px;
+        height: 400px; /* Adjust height for smaller screens */
+    }
+
+    .review-card {
+        padding: 15px;
+        font-size: 13px;
+    }
+}

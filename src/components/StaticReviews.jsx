@@ -14,7 +14,7 @@ const StaticReviews = () => {
   ];
 
   return (
-    <section id="StaticReviews" className="min-h-screen flex justify-center items-center">
+    <section id="StaticReviews" className="min-h-screen">
       <div className="w-full reviews-container">
         <div className="lane lane-up">
           {reviews.concat(reviews).map((review, index) => (

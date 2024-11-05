@@ -80,7 +80,7 @@
 @media (max-width: 768px) {
   .achievements-section {
     padding: 30px 10px;
-    min-height: auto;
+    min-height: 100vh; /* Ensure full viewport height */
   }
 
   .section-title {

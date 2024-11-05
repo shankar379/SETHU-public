@@ -22,7 +22,7 @@ const Counter = ({ target, startCount }) => {
 };
 
 const AchievementCard = ({ title, target, icon, index, startCounting }) => (
-  <motion.div variants={fadeIn("up", "spring", index * 0.5, 0.75)}>
+  <motion.div variants={fadeIn('up', 'spring', index * 0.5, 0.75)}>
     <Tilt
       options={{
         max: 35,
@@ -63,7 +63,7 @@ const Achievements = () => {
           }
         });
       },
-      { threshold: 0.8 } // Trigger when 80% of section is in view
+      { threshold: 0.4 } // Lowered threshold for better mobile performance
     );
 
     if (sectionRef.current) {
@@ -75,8 +75,8 @@ const Achievements = () => {
 
   const achievementsData = [
     { title: 'Teached Colleges', target: 120, icon: '/SETHU.png' },
-    { title: 'Projects Complated', target: 75, icon: '/SETHU.png' },
-    { title: 'Job No.of Students', target: 1000, icon: '/SETHU.png' },
+    { title: 'Projects Completed', target: 75, icon: '/SETHU.png' },
+    { title: 'Job No. of Students', target: 1000, icon: '/SETHU.png' },
     { title: 'Years Experience', target: 5, icon: '/SETHU.png' },
   ];
 

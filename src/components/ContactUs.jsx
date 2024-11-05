@@ -58,6 +58,13 @@ const Contact = () => {
   return (
     <div className="contact-container">
       <motion.div
+        variants={slideIn("right", "tween", 0.2, 1)}
+        className="earth-canvas"
+      >
+        <EarthCanvas />
+      </motion.div>
+
+      <motion.div
         variants={slideIn("left", "tween", 0.2, 1)}
         className="contact-details"
       >
@@ -102,13 +109,6 @@ const Contact = () => {
             </p>
           </div>
         </div>
-      </motion.div>
-
-      <motion.div
-        variants={slideIn("right", "tween", 0.2, 1)}
-        className="earth-canvas"
-      >
-        <EarthCanvas />
       </motion.div>
     </div>
   );

@@ -16,7 +16,7 @@ const DesktopPC = () => {
   return (
     <primitive
       object={scene}
-      scale={window.innerWidth < 768 ? 0.19 : 0.3} // Scale down for mobile screens
+      scale={window.innerWidth < 768 ? 0.19 : 0.25} // Scale down for mobile screens
       position={[0, yPosition - 0.5, 0]}
       rotation={[0, Math.PI / -2, 0]}
     />

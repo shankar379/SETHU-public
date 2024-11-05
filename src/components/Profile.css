@@ -6,7 +6,7 @@ body {
     align-items: center;
     min-height: 100vh;
     font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #1b003d, #000428); /* Gradient from dark violet to black */
+    background: linear-gradient(135deg, #1b003d, #000428);
     overflow: hidden;
 }
 
@@ -23,18 +23,17 @@ body {
     justify-content: center;
     width: 90%;
     max-width: 1200px;
-    background: linear-gradient(135deg, #1b003d, #000428, #0f0e17); /* Gradient from dark violet to very dark blue */
+    background: linear-gradient(135deg, #1b003d, #000428, #0f0e17);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
     border-radius: 12px;
     margin: 20px 0;
     opacity: 0;
-    padding-left: 100px;
+    padding: 20px;
     overflow: hidden;
-    transform: translateY(50px); /* Initial position for animation */
-    transition: opacity 0.5s ease, transform 0.5s ease;
+    transform: translateY(50px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
-/* Only animate sections with the 'animate' class */
 .profile-section.animate {
     opacity: 1;
     transform: translateY(0);

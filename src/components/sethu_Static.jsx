@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react'; 
 import StaticNav from './StaticNav';
 import StaticAbout from './StaticAbout';
 import ContactUs from './ContactUs';
@@ -6,7 +6,7 @@ import Colleges from './StaticColleges';
 import StaticReviews from './StaticReviews';
 import Achievements from './Achievements';
 import Home from './Home';
-import Profile from './Profile';
+import Profile from './Profile'; // Import the Profile component
 
 const SethuStatic = () => {
   const sectionsRef = useRef([]);
@@ -51,7 +51,7 @@ const SethuStatic = () => {
         <section ref={(el) => (sectionsRef.current[1] = el)} id="about" className="min-h-screen flex justify-center items-center">
           <StaticAbout />
         </section>
-        <section ref={(el) => (sectionsRef.current[1] = el)} id="profile" className="min-h-screen flex justify-center items-center">
+        <section ref={(el) => (sectionsRef.current[2] = el)} id="profile" className="min-h-screen flex justify-center items-center">
           <Profile />
         </section>
         <section ref={(el) => (sectionsRef.current[3] = el)} id="achievements" className="min-h-screen flex justify-center items-center">

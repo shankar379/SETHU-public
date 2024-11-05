@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Disclosure } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const navigation = [
   { name: 'Home', href: '#home' },
   { name: 'About', href: '#about' },
+  { name: 'Profile', href: '#profile' }, // Add Profile option here
   { name: 'Achievements', href: '#achievements' },
   { name: 'Colleges', href: '#colleges' },
   { name: 'Review', href: '#StaticReviews' },

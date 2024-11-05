@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Preload, useGLTF, Html, useProgress } from "@react-three/drei";
 import { motion } from "framer-motion";
+import './ContactUs.css';
 
 // Updated styles with larger text sizes and refined gradient colors
 const styles = {
@@ -55,18 +56,10 @@ const CanvasLoader = () => {
 // Updated Contact section with enhanced color palette and gradients
 const Contact = () => {
   return (
-    <div
-      className="xl:mt-12 flex flex-col-reverse xl:flex-row gap-10 overflow-hidden"
-      style={{
-        background: "linear-gradient(135deg, #0D1B4C, #1A237E, #0B072A)",
-        padding: "2rem",
-        borderRadius: "12px",
-        boxShadow: "0px 0px 20px rgba(0, 0, 0, 0.5)",
-      }}
-    >
+    <div className="contact-container">
       <motion.div
         variants={slideIn("left", "tween", 0.2, 1)}
-        className="flex-[0.75] bg-opacity-90 bg-black p-8 rounded-2xl"
+        className="contact-details"
       >
         <p className={`${styles.sectionSubText} text-blue-300`}>Get in Touch</p>
         <h3 className={`${styles.sectionHeadText} text-blue-100`}>Contact Us</h3>
@@ -74,37 +67,37 @@ const Contact = () => {
         <div className="contact-details mt-8">
           {/* Address Section */}
           <div className="contact-info mb-6">
-            <h3 className="text-lg font-semibold text-blue-300">
+            <h3>
               <i className="fas fa-map-marker-alt mr-2"></i> Address
             </h3>
-            <p className="text-white">Patha Thunga Padu Ramalayam Street, East Godavari</p>
+            <p>Patha Thunga Padu Ramalayam Street, East Godavari</p>
           </div>
 
           {/* Phone Section */}
           <div className="contact-info mb-6">
-            <h3 className="text-lg font-semibold text-blue-300">
+            <h3>
               <i className="fas fa-phone-alt mr-2"></i> Phone
             </h3>
-            <p className="text-white">
+            <p>
               <a href="tel:+919515343071">(+91) 9515343071</a>
             </p>
-            <p className="text-white">
+            <p>
               <a href="tel:+919603614667">(+91) 9603614667</a>
             </p>
           </div>
 
           {/* Email Section */}
           <div className="contact-info">
-            <h3 className="text-lg font-semibold text-blue-300">
+            <h3>
               <i className="fas fa-envelope mr-2"></i> Email
             </h3>
-            <p className="text-white">
+            <p>
               <a href="mailto:sethuteam3071@gmail.com">sethuteam3071@gmail.com</a>
             </p>
-            <p className="text-white">
+            <p>
               <a href="mailto:koneramlalsuresh@gmail.com">koneramlalsuresh@gmail.com</a>
             </p>
-            <p className="text-white">
+            <p>
               <a href="mailto:sanjaykotha678@gmail.com">sanjaykotha678@gmail.com</a>
             </p>
           </div>
@@ -113,7 +106,7 @@ const Contact = () => {
 
       <motion.div
         variants={slideIn("right", "tween", 0.2, 1)}
-        className="xl:flex-1 xl:h-auto md:h-[550px] h-[350px]"
+        className="earth-canvas"
       >
         <EarthCanvas />
       </motion.div>

@@ -80,7 +80,8 @@ const StaticAbout = () => {
       }}
     >
       {/* 3D Model Canvas */}
-      <div className="flex items-center justify-center h-1/2 lg:h-[70vh] w-full">
+      {/* 3D Model Canvas */}
+      <div className="flex items-center justify-center h-[70vh] sm:h-[70vh] lg:h-[70vh] w-full">
         <Canvas camera={{ position: [0, 0, 2.5] }} className="min-h-[250px] lg:min-h-[500px] h-full">
           <Suspense fallback={<Loader />}>
             <OrbitControls 
@@ -90,10 +91,9 @@ const StaticAbout = () => {
             />
             <ambientLight intensity={0.3} />
             <directionalLight position={[0, 5, 5]} intensity={2} />
-            <directionalLight position={[5, 5, 5]} intensity={1.5} />  // Light to the right
-            {/*<directionalLight position={[0, 5, 10]} intensity={1.5} /> // Light in front*/}
-            <directionalLight position={[3.5, 5, 8.5]} intensity={2} />  {/*// Diagonal front-right*/}
-            <directionalLight position={[3.5, 5, 1.5]} intensity={0.5} />  {/*// Diagonal back-right*/}
+            <directionalLight position={[5, 5, 5]} intensity={1.5} />
+            <directionalLight position={[3.5, 5, 8.5]} intensity={2} />
+            <directionalLight position={[3.5, 5, 1.5]} intensity={0.5} />
 
             <DesktopPC />
             <Preload all />
@@ -101,42 +101,45 @@ const StaticAbout = () => {
         </Canvas>
       </div>
 
+
       {/* Mission and Vision Section */}
-      <div className="w-full flex flex-col lg:flex-row px-4">
+      {/* Mission and Vision Section */}
+      <div className="w-full flex flex-col sm:flex-row px-4">
         <SectionWrapper 
           title="Mission" 
           content={missionText} 
-          icon={<FaBullseye className="text-blue-600 text-4xl mb-2" />} 
+          icon={<FaBullseye className="text-blue-600 text-3xl sm:text-4xl mb-2" />} 
         />
         <SectionWrapper 
           title="Vision" 
           content={visionText} 
-          icon={<FaEye className="text-purple-600 text-4xl mb-2" />} 
+          icon={<FaEye className="text-purple-600 text-3xl sm:text-4xl mb-2" />} 
         />
       </div>
 
       {/* Programs and Platforms Sections */}
-<div className="w-full px-8"> {/* Added padding on both sides */}
-  {/* Programs Section */}
-  <div className="mt-10 w-full px-4">
-    <Section 
-      title="Programs" 
-      content={programs} 
-      icon={<FaRocket className="text-teal-600 text-4xl mb-2" />} 
-      fullWidth 
-    />
-  </div>
+      <div className="w-full px-4 sm:px-8">
+        {/* Programs Section */}
+        <div className="mt-8 sm:mt-10 w-full px-8 sm:px-4">
+          <Section 
+            title="Programs" 
+            content={programs} 
+            icon={<FaRocket className="text-teal-600 text-3xl sm:text-4xl mb-2" />} 
+            fullWidth 
+          />
+        </div>
 
-  {/* Platforms Section */}
-  <div className="mt-10 w-full px-4">
-    <Section 
-      title="Platforms" 
-      content={platformsText} 
-      icon={<FaLaptopCode className="text-pink-600 text-4xl mb-2" />} 
-      fullWidth 
-    />
-  </div>
-</div>
+        {/* Platforms Section */}
+        <div className="mt-8 sm:mt-10 w-full px-8 sm:px-4">
+          <Section 
+            title="Platforms" 
+            content={platformsText} 
+            icon={<FaLaptopCode className="text-pink-600 text-3xl sm:text-4xl mb-2" />} 
+            fullWidth 
+          />
+        </div>
+      </div>
+
 
     </section>
   );

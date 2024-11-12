@@ -43,7 +43,6 @@ const Employee = () => {
         withdrawals: {}
       });
 
-      // Clear input fields after submission
       setEmployeeName('');
       setJoiningDate('');
       setPerDaySalary('');
@@ -56,7 +55,7 @@ const Employee = () => {
   const handleProfilePhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setProfilePhoto(URL.createObjectURL(file)); // Preview the selected photo
+      setProfilePhoto(URL.createObjectURL(file));
     }
   };
 
@@ -94,7 +93,6 @@ const Employee = () => {
         const newWithdrawalRef = ref(database, `employees/${employeeKey}/withdrawals/${withdrawDate}`);
         set(newWithdrawalRef, parseInt(withdrawAmount));
 
-        // Reset withdrawal inputs
         setWithdrawals(prev => ({
           ...prev,
           [employeeKey]: { date: '', amount: 0 }
@@ -184,11 +182,11 @@ const Employee = () => {
         <table className="table-auto w-full text-left border-separate border-spacing-2">
           <thead>
             <tr>
+              <th className="border-b-2 border-gray-300 px-4 py-2 text-gray-800">Profile</th>
               <th className="border-b-2 border-gray-300 px-4 py-2 text-gray-800">Name</th>
               <th className="border-b-2 border-gray-300 px-4 py-2 text-gray-800">Joining Date</th>
               <th className="border-b-2 border-gray-300 px-4 py-2 text-gray-800">Per Day Salary</th>
               <th className="border-b-2 border-gray-300 px-4 py-2 text-gray-800">Employee ID</th>
-              <th className="border-b-2 border-gray-300 px-4 py-2 text-gray-800">Profile Photo</th>
               <th className="border-b-2 border-gray-300 px-4 py-2 text-gray-800">Attendance</th>
               <th className="border-b-2 border-gray-300 px-4 py-2 text-gray-800">No. of Days Present</th>
               <th className="border-b-2 border-gray-300 px-4 py-2 text-gray-800">Withdrawals</th>
@@ -206,42 +204,48 @@ const Employee = () => {
               const daysPresent = countDaysPresent(employee.attendance);
               return (
                 <tr key={key} className="hover:bg-gray-100 transition-colors">
+                  <td className="border-b px-4 py-2 text-gray-700">
+                    {employee.profilePhoto === "No profile" ? (
+                      <span>No profile</span>
+                    ) : (
+                      <img src={employee.profilePhoto} alt="Profile" className="w-12 h-12 rounded-full" />
+                    )}
+                  </td>
                   <td className="border-b px-4 py-2 text-gray-700">{employee.name}</td>
                   <td className="border-b px-4 py-2 text-gray-700">{employee.joiningDate}</td>
                   <td className="border-b px-4 py-2 text-gray-700">{employee.perDaySalary}</td>
                   <td className="border-b px-4 py-2 text-gray-700">{employee.employeeId}</td>
                   <td className="border-b px-4 py-2 text-gray-700">
-                    {employee.profilePhoto && employee.profilePhoto !== "No profile" ? (
-                      <img src={employee.profilePhoto} alt="Profile" className="h-10 w-10 rounded-full" />
-                    ) : (
-                      <span>No profile</span>
-                    )}
-                  </td>
-                  <td className="border-b px-4 py-2 text-gray-700">
                     <input
                       type="date"
                       onChange={(e) => markAttendance(key, e.target.value)}
-                      className="border border-gray-300 rounded p-1"
+                      className="w-full p-2 border border-gray-300 rounded text-gray-700"
                     />
+                    <button
+                      onClick={() => markAttendance(key, new Date().toISOString().split("T")[0])}
+                      className="w-full mt-2 bg-[#38b000] text-white font-semibold p-2 rounded hover:bg-[#70e000]"
+                    >
+                      Toggle Present/Absent
+                    </button>
                   </td>
                   <td className="border-b px-4 py-2 text-gray-700">{daysPresent}</td>
                   <td className="border-b px-4 py-2 text-gray-700">
                     <input
                       type="date"
-                      value={withdrawals[key]?.date || ''}
-                      onChange={(e) => handleWithdrawInputChange(key, 'date', e.target.value)}
-                      className="border border-gray-300 rounded p-1"
+                      value={withdrawals[key]?.date || ""}
+                      onChange={(e) => handleWithdrawInputChange(key, "date", e.target.value)}
+                      className="w-full p-2 mb-2 border border-gray-300 rounded text-gray-700"
                     />
                     <input
                       type="number"
-                      value={withdrawals[key]?.amount || 0}
-                      onChange={(e) => handleWithdrawInputChange(key, 'amount', e.target.value)}
-                      className="border border-gray-300 rounded p-1"
-                      placeholder="Withdraw Amount"
+                      placeholder="Amount"
+                      value={withdrawals[key]?.amount || ""}
+                      onChange={(e) => handleWithdrawInputChange(key, "amount", e.target.value)}
+                      className="w-full p-2 mb-2 border border-gray-300 rounded text-gray-700"
                     />
                     <button
                       onClick={() => handleWithdraw(key)}
-                      className="bg-red-500 text-white font-semibold p-1 rounded hover:bg-red-600 mt-1"
+                      className="w-full bg-[#d9534f] text-white font-semibold p-2 rounded hover:bg-[#c9302c]"
                     >
                       Withdraw
                     </button>

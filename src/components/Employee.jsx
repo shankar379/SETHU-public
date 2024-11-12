@@ -18,6 +18,11 @@ const Employee = () => {
       const data = snapshot.val();
       setEmployeesData(data || {});
     });
+    const reviewsRef = ref(database, 'reviews');
+    onValue(reviewsRef, (snapshot) => {
+      const reviews = snapshot.val();
+      setReviewsData(reviews || {});
+    });
   }, []);
 
   const addEmployee = (e) => {
@@ -117,6 +122,41 @@ const Employee = () => {
     return Object.values(attendance || {}).filter(status => status === 'present').length;
   };
 
+  // Assuming the 'reviews' data is stored under a node like '/reviews/{employeeId}'
+const calculateAverageRating = async (employeeId) => {
+  try {
+    // Reference to the reviews node in Firebase
+    const reviewsRef = ref(getDatabase(), `reviews/${employeeId}`);
+    
+    // Fetching reviews from Firebase
+    const snapshot = await get(reviewsRef);
+    
+    if (!snapshot.exists()) {
+      return 'No reviews yet';
+    }
+
+    const reviewsData = snapshot.val();  // All reviews for the employee
+    
+    // Extracting ratings from reviewsData
+    const ratings = Object.values(reviewsData).map(review => review.rating);
+    
+    // If no ratings exist, return the message
+    if (ratings.length === 0) {
+      return 'No reviews yet';
+    }
+
+    // Calculating average rating
+    const totalRatings = ratings.reduce((sum, rating) => sum + rating, 0);
+    const averageRating = totalRatings / ratings.length;
+
+    return averageRating.toFixed(2);
+    
+  } catch (error) {
+    console.error("Error calculating average rating: ", error);
+    return 'Error fetching reviews';
+  }
+};
+  
   return (
     <div className="w-full p-8 min-h-screen bg-gradient-to-b from-[#0d001a] via-[#000033] to-[#000000] flex flex-col items-center">
       <div className="max-w-xl w-full bg-[#0d001a] shadow-xl rounded-lg p-6 mb-10">
@@ -192,11 +232,13 @@ const Employee = () => {
         <th className="border-b-2 border-[#333366] px-4 py-2 text-[#ccff33]">No. of Days Present</th>
         <th className="border-b-2 border-[#333366] px-4 py-2 text-[#ccff33]">Withdrawals</th>
         <th className="border-b-2 border-[#333366] px-4 py-2 text-[#ccff33]">Total Salary</th>
+        <th className="border-b-2 border-[#333366] px-4 py-2 text-[#ccff33]">Employee Average Rating</th>
       </tr>
     </thead>
     <tbody>
       {Object.keys(employeesData).map((key) => {
         const employee = employeesData[key];
+        const averageRating = calculateAverageRating(employee.employeeId);
         const totalSalary = calculateTotalSalary(
           employee.attendance,
           employee.perDaySalary,
@@ -271,6 +313,7 @@ const Employee = () => {
               </div>
             </td>
             <td className="border-b border-[#333366] px-4 py-2 text-white">{totalSalary}</td>
+            <td className="border-b border-[#333366] px-4 py-2">{averageRating}</td>
           </tr>
         );
       })}

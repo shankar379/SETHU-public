@@ -18,6 +18,11 @@ const Employee = () => {
       const data = snapshot.val();
       setEmployeesData(data || {});
     });
+    const reviewsRef = ref(database, 'reviews');
+    onValue(reviewsRef, (snapshot) => {
+      const reviews = snapshot.val();
+      setReviewsData(reviews || {});
+    });
   }, []);
 
   const addEmployee = (e) => {
@@ -40,8 +45,7 @@ const Employee = () => {
         profilePhoto: profilePhoto || "No profile",
         attendance: {},
         totalSalary: 0,
-        withdrawals: {},
-        averageRating: 0,
+        withdrawals: {}
       });
 
       setEmployeeName('');
@@ -118,6 +122,41 @@ const Employee = () => {
     return Object.values(attendance || {}).filter(status => status === 'present').length;
   };
 
+  // Assuming the 'reviews' data is stored under a node like '/reviews/{employeeId}'
+const calculateAverageRating = async (employeeId) => {
+  try {
+    // Reference to the reviews node in Firebase
+    const reviewsRef = ref(getDatabase(), `reviews/${employeeId}`);
+    
+    // Fetching reviews from Firebase
+    const snapshot = await get(reviewsRef);
+    
+    if (!snapshot.exists()) {
+      return 'No reviews yet';
+    }
+
+    const reviewsData = snapshot.val();  // All reviews for the employee
+    
+    // Extracting ratings from reviewsData
+    const ratings = Object.values(reviewsData).map(review => review.rating);
+    
+    // If no ratings exist, return the message
+    if (ratings.length === 0) {
+      return 'No reviews yet';
+    }
+
+    // Calculating average rating
+    const totalRatings = ratings.reduce((sum, rating) => sum + rating, 0);
+    const averageRating = totalRatings / ratings.length;
+
+    return averageRating.toFixed(2);
+    
+  } catch (error) {
+    console.error("Error calculating average rating: ", error);
+    return 'Error fetching reviews';
+  }
+};
+  
   return (
     <div className="w-full p-8 min-h-screen bg-gradient-to-b from-[#0d001a] via-[#000033] to-[#000000] flex flex-col items-center">
       <div className="max-w-xl w-full bg-[#0d001a] shadow-xl rounded-lg p-6 mb-10">
@@ -197,90 +236,88 @@ const Employee = () => {
       </tr>
     </thead>
     <tbody>
-  {Object.keys(employeesData).map((key) => {
-    const employee = employeesData[key];
-    const totalSalary = calculateTotalSalary(
-      employee.attendance,
-      employee.perDaySalary,
-      employee.withdrawals,
-      employee.averageRating
-    );
-    const daysPresent = countDaysPresent(employee.attendance);
-
-    return (
-      <tr key={key} className="hover:bg-[#1a002b] transition-colors">
-        <td className="border-b border-[#333366] px-4 py-2 text-white">
-          {employee.profilePhoto === "No profile" ? (
-            <span>No profile</span>
-          ) : (
-            <img src={employee.profilePhoto} alt="Profile" className="w-12 h-12 rounded-full" />
-          )}
-        </td>
-        <td className="border-b border-[#333366] px-4 py-2 text-white">{employee.name}</td>
-        <td className="border-b border-[#333366] px-4 py-2 text-white">{employee.joiningDate}</td>
-        <td className="border-b border-[#333366] px-4 py-2 text-white">{employee.perDaySalary}</td>
-        <td className="border-b border-[#333366] px-4 py-2 text-white">{employee.employeeId}</td>
-        <td className="border-b border-[#333366] px-4 py-2 text-white">
-          <input
-            type="date"
-            onChange={(e) => markAttendance(key, e.target.value)}
-            className="w-full p-2 border border-[#4c005c] rounded bg-[#1a002b] text-white"
-          />
-          <button
-            onClick={() => markAttendance(key, new Date().toISOString().split("T")[0])}
-            className="w-full mt-2 bg-[#000033] text-white font-semibold p-2 rounded hover:bg-[#333366]"
-          >
-            Toggle Present/Absent
-          </button>
-          <div className="mt-4 space-y-1">
-            {Object.entries(employee.attendance || {}).map(([date, status]) => (
-              <div key={date} className="flex justify-between items-center">
-                <span className="text-gray-300">{date}</span>
-                <span className={`text-sm font-semibold ${status === 'present' ? 'text-green-500' : 'text-red-500'}`}>
-                  {status === 'present' ? 'Present' : 'Absent'}
-                </span>
-              </div>
-            ))}
-          </div>
-        </td>
-        <td className="border-b border-[#333366] px-4 py-2 text-white">{daysPresent}</td>
-        <td className="border-b border-[#333366] px-4 py-2 text-white">
-          <div className="flex flex-col">
-            <div className="flex items-center space-x-2 mb-2">
-              <input
-                type="number"
-                placeholder="Amount"
-                value={withdrawals[key]?.amount || ''}
-                onChange={(e) => handleWithdrawInputChange(key, 'amount', e.target.value)}
-                className="p-1 border border-[#4c005c] rounded w-24 bg-[#1a002b] text-white"
-              />
+      {Object.keys(employeesData).map((key) => {
+        const employee = employeesData[key];
+        const averageRating = calculateAverageRating(employee.employeeId);
+        const totalSalary = calculateTotalSalary(
+          employee.attendance,
+          employee.perDaySalary,
+          employee.withdrawals
+        );
+        const daysPresent = countDaysPresent(employee.attendance);
+        return (
+          <tr key={key} className="hover:bg-[#1a002b] transition-colors">
+            <td className="border-b border-[#333366] px-4 py-2 text-white">
+              {employee.profilePhoto === "No profile" ? (
+                <span>No profile</span>
+              ) : (
+                <img src={employee.profilePhoto} alt="Profile" className="w-12 h-12 rounded-full" />
+              )}
+            </td>
+            <td className="border-b border-[#333366] px-4 py-2 text-white">{employee.name}</td>
+            <td className="border-b border-[#333366] px-4 py-2 text-white">{employee.joiningDate}</td>
+            <td className="border-b border-[#333366] px-4 py-2 text-white">{employee.perDaySalary}</td>
+            <td className="border-b border-[#333366] px-4 py-2 text-white">{employee.employeeId}</td>
+            <td className="border-b border-[#333366] px-4 py-2 text-white">
               <input
                 type="date"
-                value={withdrawals[key]?.date || ''}
-                onChange={(e) => handleWithdrawInputChange(key, 'date', e.target.value)}
-                className="p-1 border border-[#4c005c] rounded w-32 bg-[#1a002b] text-white"
+                onChange={(e) => markAttendance(key, e.target.value)}
+                className="w-full p-2 border border-[#4c005c] rounded bg-[#1a002b] text-white"
               />
               <button
-                onClick={() => handleWithdraw(key)}
-                className="bg-[#000033] text-white font-semibold p-2 rounded hover:bg-[#333366]"
+                onClick={() => markAttendance(key, new Date().toISOString().split("T")[0])}
+                className="w-full mt-2 bg-[#000033] text-white font-semibold p-2 rounded hover:bg-[#333366]"
               >
-                Withdraw
+                Toggle Present/Absent
               </button>
-            </div>
-            {Object.entries(employee.withdrawals || {}).map(([date, amount]) => (
-              <div key={date} className="text-sm text-gray-300">
-                {`${date}: $${amount}`}
+              <div className="mt-4 space-y-1">
+                {Object.entries(employee.attendance || {}).map(([date, status]) => (
+                  <div key={date} className="flex justify-between items-center">
+                    <span className="text-gray-300">{date}</span>
+                    <span className={`text-sm font-semibold ${status === 'present' ? 'text-green-500' : 'text-red-500'}`}>
+                      {status === 'present' ? 'Present' : 'Absent'}
+                    </span>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </td>
-        <td className="border-b border-[#333366] px-4 py-2 text-white">{totalSalary}</td>
-        <td className="p-4">{employee.averageRating ? `${employee.averageRating} / 5` : 'Not Available'}</td> {/* Display average rating */}
-      </tr>
-    );
-  })}
-</tbody>
-
+            </td>
+            <td className="border-b border-[#333366] px-4 py-2 text-white">{daysPresent}</td>
+            <td className="border-b border-[#333366] px-4 py-2 text-white">
+              <div className="flex flex-col">
+                <div className="flex items-center space-x-2 mb-2">
+                  <input
+                    type="number"
+                    placeholder="Amount"
+                    value={withdrawals[key]?.amount || ''}
+                    onChange={(e) => handleWithdrawInputChange(key, 'amount', e.target.value)}
+                    className="p-1 border border-[#4c005c] rounded w-24 bg-[#1a002b] text-white"
+                  />
+                  <input
+                    type="date"
+                    value={withdrawals[key]?.date || ''}
+                    onChange={(e) => handleWithdrawInputChange(key, 'date', e.target.value)}
+                    className="p-1 border border-[#4c005c] rounded w-32 bg-[#1a002b] text-white"
+                  />
+                  <button
+                    onClick={() => handleWithdraw(key)}
+                    className="bg-[#000033] text-white font-semibold p-2 rounded hover:bg-[#333366]"
+                  >
+                    Withdraw
+                  </button>
+                </div>
+                {Object.entries(employee.withdrawals || {}).map(([date, amount]) => (
+                  <div key={date} className="text-sm text-gray-300">
+                    {`${date}: $${amount}`}
+                  </div>
+                ))}
+              </div>
+            </td>
+            <td className="border-b border-[#333366] px-4 py-2 text-white">{totalSalary}</td>
+            <td className="border-b border-[#333366] px-4 py-2">{averageRating}</td>
+          </tr>
+        );
+      })}
+    </tbody>
   </table>
 </div>
 

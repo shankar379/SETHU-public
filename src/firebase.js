@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject, listAll } from "firebase/storage";
-import { getDatabase, ref, set, get, child, remove, onValue, push } from "firebase/database";
+import { getDatabase, ref, set, get, child, remove, onValue, push, update } from "firebase/database"; // Add 'update' here
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth"; // Import authentication
 
@@ -23,4 +23,4 @@ const db = getFirestore(app);
 const auth = getAuth(app); // Initialize auth
 
 // Export all the necessary Firebase services
-export { db, storage, database, storageRef, uploadBytes, getDownloadURL, deleteObject, listAll, ref, set, get, child, remove, onValue, push, auth };
+export { db, storage, database, storageRef, uploadBytes, getDownloadURL, deleteObject, listAll, ref, set, get, child, remove, onValue, push, update, auth }; // Export 'update'

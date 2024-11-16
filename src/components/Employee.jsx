@@ -20,45 +20,65 @@ const Employee = () => {
     });
   }, []);
 
-  const addEmployee = (e) => {
+  const addEmployee = async (e) => {
     e.preventDefault();
     setErrorMessage('');
-
+    
     if (employeeName && joiningDate && perDaySalary && employeeId && employeePassword) {
       if (Object.values(employeesData).some(emp => emp.employeeId === employeeId)) {
         setErrorMessage('Employee ID must be unique. Please choose another ID.');
         return;
       }
-
-      const newEmployeeRef = push(ref(database, 'employees'));
-      set(newEmployeeRef, {
-        name: employeeName,
-        joiningDate: joiningDate,
-        perDaySalary: parseInt(perDaySalary),
-        employeeId: employeeId,
-        employeePassword: employeePassword,
-        profilePhoto: profilePhoto || "No profile",
-        attendance: {},
-        totalSalary: 0,
-        withdrawals: {},
-        averageRating: 0,
-      });
-
-      setEmployeeName('');
-      setJoiningDate('');
-      setPerDaySalary('');
-      setEmployeeId('');
-      setEmployeePassword('');
-      setProfilePhoto(null);
+  
+      try {
+        let profilePhotoUrl = "No profile";
+  
+        // Upload profile photo to Firebase Storage
+        if (profilePhoto) {
+          const storagePath = `EmployeesProfiles/${employeeId}`;
+          const photoRef = storageRef(storage, storagePath);
+          await uploadBytes(photoRef, profilePhoto);
+          profilePhotoUrl = await getDownloadURL(photoRef); // Get the download URL
+        }
+  
+        const newEmployeeRef = push(ref(database, 'employees'));
+        await set(newEmployeeRef, {
+          name: employeeName,
+          joiningDate: joiningDate,
+          perDaySalary: parseInt(perDaySalary),
+          employeeId: employeeId,
+          employeePassword: employeePassword,
+          profilePhoto: profilePhotoUrl, // Store the profile photo URL
+          attendance: {},
+          totalSalary: 0,
+          withdrawals: {},
+          averageRating: 0,
+        });
+  
+        // Reset form fields
+        setEmployeeName('');
+        setJoiningDate('');
+        setPerDaySalary('');
+        setEmployeeId('');
+        setEmployeePassword('');
+        setProfilePhoto(null);
+      } catch (error) {
+        console.error("Error adding employee:", error);
+        setErrorMessage('Failed to add employee. Please try again.');
+      }
     }
   };
-
+  
   const handleProfilePhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setProfilePhoto(URL.createObjectURL(file));
+      setProfilePhoto(file); // Store the file for later upload in addEmployee
     }
   };
+  
+  
+  
+  
 
   const calculateTotalSalary = (attendance, perDaySalary, withdrawals) => {
     const attendanceTotal = Object.values(attendance || {}).reduce((total, status) => {
@@ -210,12 +230,18 @@ const Employee = () => {
     return (
       <tr key={key} className="hover:bg-[#1a002b] transition-colors">
         <td className="border-b border-[#333366] px-4 py-2 text-white">
-          {employee.profilePhoto === "No profile" ? (
-            <span>No profile</span>
-          ) : (
-            <img src={employee.profilePhoto} alt="Profile" className="w-12 h-12 rounded-full" />
-          )}
-        </td>
+  {employee.profilePhoto === "No profile" ? (
+    <span>No profile</span>
+  ) : (
+    <img
+      src={employee.profilePhoto}
+      alt="Profile"
+      className="w-12 h-12 rounded-full object-cover"
+    />
+  )}
+</td>
+
+
         <td className="border-b border-[#333366] px-4 py-2 text-white">{employee.name}</td>
         <td className="border-b border-[#333366] px-4 py-2 text-white">{employee.joiningDate}</td>
         <td className="border-b border-[#333366] px-4 py-2 text-white">{employee.perDaySalary}</td>

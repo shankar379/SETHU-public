@@ -50,7 +50,7 @@
 /* Mobile-specific styles */
 @media (max-width: 768px) {
     #hero-section {
-        background-position: 90% center; /* Slightly shift background to the left */
+        background-position: 40% center; /* Slightly shift background to the left */
     }
 
     #hero-section .content {

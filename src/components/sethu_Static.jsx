@@ -7,6 +7,7 @@ import StaticReviews from './StaticReviews';
 import Achievements from './Achievements';
 import Home from './Home';
 import Profile from './Profile'; // Import the Profile component
+import Footer from './footer';
 
 const SethuStatic = () => {
   const sectionsRef = useRef([]);
@@ -66,6 +67,7 @@ const SethuStatic = () => {
         <section ref={(el) => (sectionsRef.current[6] = el)} id="contact" className="min-h-screen flex justify-center items-center">
           <ContactUs />
         </section>
+        <Footer/>
       </div>
     </div>
   );

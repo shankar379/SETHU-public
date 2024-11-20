@@ -18,8 +18,13 @@ const Counter = ({ target, startCount }) => {
     }
   }, [startCount, target]);
 
-  return <span>{count}</span>;
+  return (
+    <span className="counter-text">
+      {count}+
+    </span>
+  );
 };
+
 
 const AchievementCard = ({ title, target, icon, index, startCounting }) => (
   <motion.div variants={fadeIn('up', 'spring', index * 0.5, 0.75)}>
@@ -74,10 +79,10 @@ const Achievements = () => {
   }, []);
 
   const achievementsData = [
-    { title: 'Teached Colleges', target: 120, icon: '/SETHU.png' },
-    { title: 'Projects Completed', target: 75, icon: '/SETHU.png' },
-    { title: 'Job No. of Students', target: 1000, icon: '/SETHU.png' },
-    { title: 'Years Experience', target: 5, icon: '/SETHU.png' },
+    { title: 'Teached Colleges', target: 120, icon: '/logos/teached.webp' },
+    { title: 'Projects Completed', target: 75, icon: '/logos/projects.webp' },
+    { title: 'Job No. of Students', target: 1000, icon: '/logos/student.webp' },
+    { title: 'Years Experience', target: 5, icon: '/logos/years.webp' },
   ];
 
   return (

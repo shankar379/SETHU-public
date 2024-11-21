@@ -1,17 +1,15 @@
 import React from 'react';
 import { Disclosure } from '@headlessui/react';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 
 const navigation = [
   { name: 'Home', href: '#home' },
   { name: 'About', href: '#about' },
-  { name: 'Profile', href: '#profile' }, // Add Profile option here
+  { name: 'Profile', href: '#profile' },
   { name: 'Achievements', href: '#achievements' },
   { name: 'Colleges', href: '#colleges' },
   { name: 'Review', href: '#StaticReviews' },
   { name: 'Contact Us', href: '#contact' },
-  { name: 'Admin Login', href: '/login' },
-  { name: 'Employee Login', href: '/employee-login' },
 ];
 
 function classNames(...classes) {
@@ -28,13 +26,16 @@ const StaticNav = ({ activeLink }) => {
               <img className="h-16 w-16 rounded-full shadow-xl" src="/sethu5.png" alt="Your Company" />
             </div>
 
+            {/* Desktop Navigation */}
             <div className="hidden sm:flex ml-auto space-x-10">
               {navigation.map((item) => (
                 <a
                   key={item.name}
                   href={item.href}
                   className={classNames(
-                    item.href.slice(1) === activeLink ? 'text-blue-500 font-bold' : 'text-gray-300 hover:bg-indigo-500 hover:text-white',
+                    item.href.slice(1) === activeLink
+                      ? 'text-blue-500 font-bold'
+                      : 'text-gray-300 hover:bg-indigo-500 hover:text-white',
                     'px-6 py-3 rounded-lg text-base font-semibold transition duration-300 ease-in-out transform hover:scale-105'
                   )}
                   aria-current={item.href.slice(1) === activeLink ? 'page' : undefined}
@@ -42,6 +43,29 @@ const StaticNav = ({ activeLink }) => {
                   {item.name}
                 </a>
               ))}
+
+              {/* Login Button with Enhanced Dropdown */}
+              <div className="relative group">
+                <button className="flex items-center px-6 py-3 text-gray-300 bg-transparent hover:bg-indigo-500 hover:text-white font-semibold rounded-lg transition duration-300 ease-in-out">
+                  Login <ChevronDownIcon className="w-5 h-5 ml-2" />
+                </button>
+                <div className="absolute right-0 hidden mt-2 w-48 bg-gradient-to-b from-indigo-700 via-indigo-800 to-indigo-900 text-white rounded-lg shadow-lg group-hover:block transition-all duration-300 transform group-hover:scale-100 scale-95 origin-top-right">
+                  <a
+                    href="/login"
+                    className="flex items-center px-4 py-2 hover:bg-indigo-600 rounded-md transition duration-200 space-x-2"
+                  >
+                    <span className="bg-blue-500 p-1 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">A</span>
+                    <span>Admin Login</span>
+                  </a>
+                  <a
+                    href="/employee-login"
+                    className="flex items-center px-4 py-2 hover:bg-indigo-600 rounded-md transition duration-200 space-x-2"
+                  >
+                    <span className="bg-green-500 p-1 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">E</span>
+                    <span>Employee Login</span>
+                  </a>
+                </div>
+              </div>
             </div>
 
             {/* Mobile Menu Button */}
@@ -66,7 +90,9 @@ const StaticNav = ({ activeLink }) => {
                   as="a"
                   href={item.href}
                   className={classNames(
-                    item.href.slice(1) === activeLink ? 'bg-blue-500 text-white' : 'text-gray-300 hover:bg-blue-500 hover:text-white',
+                    item.href.slice(1) === activeLink
+                      ? 'bg-blue-500 text-white'
+                      : 'text-gray-300 hover:bg-blue-500 hover:text-white',
                     'block px-3 py-2 rounded-md text-base font-medium'
                   )}
                   aria-current={item.href.slice(1) === activeLink ? 'page' : undefined}
@@ -74,6 +100,32 @@ const StaticNav = ({ activeLink }) => {
                   {item.name}
                 </Disclosure.Button>
               ))}
+
+              {/* Login Dropdown in Mobile */}
+              <div className="mt-4">
+                <Disclosure.Button
+                  as="div"
+                  className="flex items-center px-3 py-2 text-gray-300 bg-indigo-700 hover:bg-indigo-500 rounded-md text-base font-medium"
+                >
+                  Login <ChevronDownIcon className="w-5 h-5 ml-2" />
+                </Disclosure.Button>
+                <div className="pl-4 mt-2">
+                  <a
+                    href="/login"
+                    className="flex items-center px-4 py-2 text-gray-300 hover:bg-indigo-600 rounded-md transition duration-200 space-x-2"
+                  >
+                    <span className="bg-blue-500 p-1 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">A</span>
+                    <span>Admin Login</span>
+                  </a>
+                  <a
+                    href="/employee-login"
+                    className="flex items-center px-4 py-2 text-gray-300 hover:bg-indigo-600 rounded-md transition duration-200 space-x-2"
+                  >
+                    <span className="bg-green-500 p-1 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">E</span>
+                    <span>Employee Login</span>
+                  </a>
+                </div>
+              </div>
             </div>
           </Disclosure.Panel>
         </>

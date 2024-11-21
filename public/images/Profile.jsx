@@ -59,7 +59,7 @@ const Profile = () => {
   }, []);
 
   return (
-    <div className="profile-container min-h-screen flex justify-center items-center">
+    <div className="profile-container">
       {profiles.map((profile, index) => (
         <div
           id={`section-${index}`}

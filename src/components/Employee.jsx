@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { database, ref, set, push, onValue } from '../firebase';
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
+const storage = getStorage(); // Ensure Firebase storage is initialized
+
 
 const Employee = () => {
   const [employeesData, setEmployeesData] = useState({});
@@ -23,7 +26,7 @@ const Employee = () => {
   const addEmployee = async (e) => {
     e.preventDefault();
     setErrorMessage('');
-    
+  
     if (employeeName && joiningDate && perDaySalary && employeeId && employeePassword) {
       if (Object.values(employeesData).some(emp => emp.employeeId === employeeId)) {
         setErrorMessage('Employee ID must be unique. Please choose another ID.');
@@ -35,10 +38,16 @@ const Employee = () => {
   
         // Upload profile photo to Firebase Storage
         if (profilePhoto) {
-          const storagePath = `EmployeesProfiles/${employeeId}`;
-          const photoRef = storageRef(storage, storagePath);
-          await uploadBytes(photoRef, profilePhoto);
-          profilePhotoUrl = await getDownloadURL(photoRef); // Get the download URL
+          try {
+            const storagePath = `EmployeesProfiles/${employeeId}`;
+            const photoRef = storageRef(storage, storagePath);
+            await uploadBytes(photoRef, profilePhoto);
+            profilePhotoUrl = await getDownloadURL(photoRef); // Get the download URL
+          } catch (err) {
+            console.error("Error uploading profile photo:", err);
+            setErrorMessage("Failed to upload profile photo. Please try again.");
+            return;
+          }
         }
   
         const newEmployeeRef = push(ref(database, 'employees'));
@@ -66,20 +75,21 @@ const Employee = () => {
         console.error("Error adding employee:", error);
         setErrorMessage('Failed to add employee. Please try again.');
       }
+    } else {
+      setErrorMessage("Please fill out all required fields.");
     }
   };
   
   const handleProfilePhotoChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
+    if (file && file.type.startsWith("image/")) {
       setProfilePhoto(file); // Store the file for later upload in addEmployee
+    } else {
+      setErrorMessage("Please upload a valid image file.");
     }
   };
   
   
-  
-  
-
   const calculateTotalSalary = (attendance, perDaySalary, withdrawals) => {
     const attendanceTotal = Object.values(attendance || {}).reduce((total, status) => {
       return total + (status === 'present' ? perDaySalary : 0);
@@ -259,15 +269,18 @@ const Employee = () => {
             Toggle Present/Absent
           </button>
           <div className="mt-4 space-y-1">
-            {Object.entries(employee.attendance || {}).map(([date, status]) => (
-              <div key={date} className="flex justify-between items-center">
-                <span className="text-gray-300">{date}</span>
-                <span className={`text-sm font-semibold ${status === 'present' ? 'text-green-500' : 'text-red-500'}`}>
-                  {status === 'present' ? 'Present' : 'Absent'}
-                </span>
-              </div>
-            ))}
+            <div className="overflow-y-auto h-32 w-64 border border-gray-300 p-2"> {/* Adjust h-64 and w-64 for desired height and width */}
+              {Object.entries(employee.attendance || {}).map(([date, status]) => (
+                <div key={date} className="flex justify-between items-center">
+                  <span className="text-gray-300">{date}</span>
+                  <span className={`text-sm font-semibold ${status === 'present' ? 'text-green-500' : 'text-red-500'}`}>
+                    {status === 'present' ? 'Present' : 'Absent'}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
+
         </td>
         <td className="border-b border-[#333366] px-4 py-2 text-white">{daysPresent}</td>
         <td className="border-b border-[#333366] px-4 py-2 text-white">
@@ -293,11 +306,16 @@ const Employee = () => {
                 Withdraw
               </button>
             </div>
-            {Object.entries(employee.withdrawals || {}).map(([date, amount]) => (
-              <div key={date} className="text-sm text-gray-300">
-                {`${date}: $${amount}`}
+            <div className="mt-4 space-y-1">
+              <div className="overflow-y-auto h-32 w-64 border border-gray-300 p-2"> {/* Adjust h-64 and w-64 for desired height and width */}
+                {Object.entries(employee.withdrawals || {}).map(([date, amount]) => (
+                  <div key={date} className="text-sm text-gray-300">
+                    {`${date}: $${amount}`}
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+
           </div>
         </td>
         <td className="border-b border-[#333366] px-4 py-2 text-white">{totalSalary}</td>

@@ -10,12 +10,37 @@ body {
     overflow: hidden;
 }
 
-.profile-container {
+.profile-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+  }
+  
+  .profile-links a {
+    font-size: 1.5em;
+    color: #b19cd9;
+    transition: color 0.3s ease;
+  }
+  
+  .profile-links a:hover {
+    color: #f39c12;
+  }
+  
+  .fa-solid,
+  .fab {
+    font-size: 1.5em;
+  }
+  
+  .profile-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
-}
+    background: linear-gradient(to right, #21002e, #000a4e); /* Very dark violet to very dark blue */
+    color: white; /* Ensure text is readable on the dark gradient */
+    padding: 20px; /* Optional: Add padding for spacing */
+  }
+  
 
 .profile-section {
     display: flex;

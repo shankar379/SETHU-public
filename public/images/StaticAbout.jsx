@@ -32,7 +32,7 @@ const Loader = () => {
   );
 };
 
-const Section = ({ icon, title, content, fullWidth, children }) => (
+const Section = ({ icon, title, content, fullWidth }) => (
   <div
     className={`p-4 bg-white bg-opacity-70 rounded-xl shadow-lg ${
       fullWidth ? "w-full" : "w-90"
@@ -41,7 +41,6 @@ const Section = ({ icon, title, content, fullWidth, children }) => (
     {icon}
     <h3 className="text-2xl font-semibold mb-2 text-gray-900">{title}</h3>
     <p className="text-base text-gray-700 leading-relaxed">{content}</p>
-    {children}
   </div>
 );
 
@@ -55,7 +54,6 @@ const StaticAbout = () => {
   const [missionText, setMissionText] = useState("");
   const [visionText, setVisionText] = useState("");
   const [programs, setPrograms] = useState("");
-  const [programImages, setProgramImages] = useState([]);
   const [platformsText, setPlatformsText] = useState("");
   const [platformImages, setPlatformImages] = useState([]);
 
@@ -66,30 +64,20 @@ const StaticAbout = () => {
       if (data) {
         setMissionText(data.missionText || "");
         setVisionText(data.visionText || "");
-  
-        const programs = data.programs || "";
-        const programWords = programs.split(/\s+/);
-        const programImgs = programWords.filter((word) => isValidImageUrl(word));
-        setProgramImages([...programImgs,...programImgs,...programImgs,...programImgs,...programImgs,...programImgs]);
-  
-        const programText = programWords
-          .filter((word) => !isValidImageUrl(word))
-          .join(" ");
-        setPrograms(programText);
-  
+        setPrograms(data.programs || "");
+
         const platforms = data.platformsText || "";
-        const platformWords = platforms.split(/\s+/);
-        const platformImgs = platformWords.filter((word) => isValidImageUrl(word));
-        setPlatformImages([...platformImgs,...platformImgs,...platformImgs,...platformImgs,...platformImgs,...platformImgs]);
-  
-        const platformText = platformWords
-          .filter((word) => !isValidImageUrl(word))
-          .join(" ");
-        setPlatformsText(platformText);
+        const words = platforms.split(/\s+/);
+        const images = words.filter((word) => isValidImageUrl(word));
+        setPlatformImages([...images, ...images,...images,...images,...images,...images,...images,...images,...images,...images,...images,...images,...images,...images]); // Duplicate images
+        setPlatformsText(
+          words
+            .filter((word) => !isValidImageUrl(word))
+            .join(" ")
+        );
       }
     });
   }, []);
-  
 
   const isValidImageUrl = (url) => {
     const regex = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp))/i;
@@ -133,22 +121,12 @@ const StaticAbout = () => {
 
       <div className="w-full px-4 sm:px-8">
         <div className="mt-8 sm:mt-10 w-full px-8 sm:px-4">
-        <Section
+          <Section
             title="Programs"
             content={programs}
             icon={<FaRocket className="text-teal-600 text-3xl sm:text-4xl mb-2" />}
             fullWidth
-          >
-            {/* Render Program Images */}
-            <div className="logos mt-4">
-              <div className="logos-slide">
-                {programImages.map((image, index) => (
-                  <img key={index} src={image} alt={`program ${index}`} className="w-20 h-20 object-contain mx-2" />
-                ))}
-              </div>
-            </div>
-          </Section>
-
+          />
         </div>
 
         <div className="mt-8 sm:mt-10 w-full px-8 sm:px-4">
@@ -157,15 +135,14 @@ const StaticAbout = () => {
             content={platformsText}
             icon={<FaLaptopCode className="text-pink-600 text-3xl sm:text-4xl mb-2" />}
             fullWidth
-          >
-            <div className="logos mt-4">
-              <div className="logos-slide">
-                {platformImages.map((image, index) => (
-                  <img key={index} src={image} alt={`platform ${index}`} />
-                ))}
-              </div>
+          />
+          <div className="logos mt-4">
+            <div className="logos-slide">
+              {platformImages.map((image, index) => (
+                <img key={index} src={image} alt={`platform ${index}`} />
+              ))}
             </div>
-          </Section>
+          </div>
         </div>
       </div>
     </section>

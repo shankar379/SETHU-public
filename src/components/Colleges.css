@@ -21,7 +21,7 @@ body {
 }
 
 /* Colleges Section */
-.colleges {
+.collegess {
   background: linear-gradient(135deg, var(--bg-dark-navy), var(--bg-deep-blue));
   padding: 60px 0;
   min-height: 100vh; /* Full viewport height on desktop */
@@ -39,13 +39,13 @@ body {
   }
 }
 
-.logos {
+.logoss {
   overflow: hidden;
   display: flex;
   white-space: nowrap;
 }
 
-.logos-slide {
+.logoss-slide {
   display: flex;
   animation: slide 35s linear infinite;
 }

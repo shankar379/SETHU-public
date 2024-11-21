@@ -58,7 +58,7 @@ const Colleges = () => {
   };
 
   return (
-    <section className="colleges">
+    <section className="collegess">
       <h2 className="text-4xl font-bold mb-6 text-center">Colleges</h2>
       <p className="text-lg text-center max-w-2xl mx-auto mb-12">
         We partner with top colleges and universities to provide comprehensive training programs. Learn more about our partnerships and the benefits they offer to students.
@@ -71,8 +71,8 @@ const Colleges = () => {
         </button>
       </div>
 
-      <div className="logos">
-        <div className="logos-slide">
+      <div className="logoss">
+        <div className="logoss-slide">
           {collegeData.map((college, index) => (
             <div key={index} className="college-item">
               <img src={college.image} alt={college.name} />
@@ -83,7 +83,7 @@ const Colleges = () => {
             </div>
           ))}
         </div>
-        <div className="logos-slide">
+        <div className="logoss-slide">
           {collegeData.map((college, index) => (
             <div key={`copy-${index}`} className="college-item">
               <img src={college.image} alt={college.name} />

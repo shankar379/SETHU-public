@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { database, ref, onValue, update } from '../firebase';
+import { database, get, ref, onValue } from '../firebase';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const EmployeeProfile = () => {
   const [employeeData, setEmployeeData] = useState(null);
+  const [totalSalary, setTotalSalary] = useState(0);
   const [averageRating, setAverageRating] = useState(0);
+  const [daysPresent, setDaysPresent] = useState(0);
   const [employeeNodeId, setEmployeeNodeId] = useState('');
   const { employeeId } = useParams();
   const navigate = useNavigate();
@@ -22,7 +24,9 @@ const EmployeeProfile = () => {
         const [nodeId, employee] = employeeEntry;
         setEmployeeData(employee);
         setEmployeeNodeId(nodeId);
-        calculateAverageRating(employee.reviews, nodeId);
+        fetchTotalSalary(nodeId); // Fetch total salary from the database
+        calculateDaysPresent(employee.attendance); // Calculate Days Present
+        calculateAverageRating(employee.reviews); // Calculate Average Rating
       } else {
         navigate('/employee-login');
       }
@@ -31,40 +35,38 @@ const EmployeeProfile = () => {
     return () => unsubscribe();
   }, [employeeId, navigate]);
 
-  const calculateAverageRating = (reviews, nodeId) => {
+  // Fetch total salary from the database
+  const fetchTotalSalary = (nodeId) => {
+    const totalSalaryRef = ref(database, `employees/${nodeId}/totalSalary`);
+    get(totalSalaryRef).then((snapshot) => {
+      const salary = snapshot.val();
+      if (salary !== null) {
+        setTotalSalary(salary);
+      }
+    });
+  };
+
+  // Calculate the number of days present
+  const calculateDaysPresent = (attendance) => {
+    const presentDays = Object.values(attendance || {}).filter((status) => status === 'present').length;
+    setDaysPresent(presentDays);
+  };
+
+  // Calculate the average rating
+  const calculateAverageRating = (reviews) => {
     if (reviews) {
       const ratings = Object.values(reviews).map((review) => parseFloat(review.rating));
       const average = ratings.length > 0 ? ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length : 0;
       const roundedAverage = parseFloat(average.toFixed(2));
-
-      const employeeRef = ref(database, `employees/${nodeId}`);
-      update(employeeRef, { averageRating: roundedAverage });
-
       setAverageRating(roundedAverage);
     }
-  };
-
-  const calculateTotalSalary = (attendance, perDaySalary, withdrawals) => {
-    const attendanceTotal = Object.values(attendance || {}).reduce((total, status) => {
-      return total + (status === 'present' ? perDaySalary : 0);
-    }, 0);
-
-    const totalWithdrawn = Object.values(withdrawals || {}).reduce((total, amount) => total + amount, 0);
-
-    return attendanceTotal - totalWithdrawn;
-  };
-
-  const countDaysPresent = (attendance) => {
-    return Object.values(attendance || {}).filter((status) => status === 'present').length;
   };
 
   if (!employeeData) {
     return <div className="flex items-center justify-center h-screen text-white">Loading...</div>;
   }
 
-  const { name, joiningDate, perDaySalary, profilePhoto, attendance, withdrawals, reviews } = employeeData;
-  const totalSalary = calculateTotalSalary(attendance, perDaySalary, withdrawals);
-  const daysPresent = countDaysPresent(attendance);
+  const { name, joiningDate, perDaySalary, profilePhoto } = employeeData;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#0d001a] via-[#000033] to-[#000000] p-10">
@@ -93,19 +95,20 @@ const EmployeeProfile = () => {
           <ShareableLink nodeId={employeeNodeId} />
         </div>
         <div className="my-4">
-          <SectionCard title="Attendance Record" data={attendance} />
+          <SectionCard title="Attendance Record" data={employeeData.attendance} />
         </div>
         <div className="my-4">
-          <SectionCard title="Withdrawal History" data={withdrawals} isCurrency />
+          <SectionCard title="Withdrawal History" data={employeeData.withdrawals} isCurrency />
         </div>
         <div className="my-4">
-          <ReviewsSection reviews={reviews} />
+          <ReviewsSection reviews={employeeData.reviews} />
         </div>
       </div>
     </div>
   );
 };
 
+// InfoCard component to display individual info
 const InfoCard = ({ label, value }) => (
   <div className="bg-[#2a2a5c] p-4 rounded-lg shadow-md text-white">
     <h4 className="text-gray-400">{label}</h4>
@@ -113,6 +116,7 @@ const InfoCard = ({ label, value }) => (
   </div>
 );
 
+// SectionCard component to display attendance or withdrawal data
 const SectionCard = ({ title, data, isCurrency = false }) => (
   <div className="bg-[#1a1a4d] shadow-lg rounded-lg p-6 text-white">
     <h3 className="text-xl font-semibold text-[#ccff33] mb-4">{title}</h3>
@@ -129,6 +133,7 @@ const SectionCard = ({ title, data, isCurrency = false }) => (
   </div>
 );
 
+// ReviewsSection component to display reviews
 const ReviewsSection = ({ reviews }) => (
   <div className="bg-[#1a1a4d] shadow-lg rounded-lg p-6 text-white">
     <h3 className="text-xl font-semibold text-[#ccff33] mb-4">Reviews</h3>
@@ -144,6 +149,7 @@ const ReviewsSection = ({ reviews }) => (
   </div>
 );
 
+// ReviewCard component to display individual review data
 const ReviewCard = ({ rating, text, rollNumber, branch }) => (
   <div className="bg-[#2a2a5c] p-4 rounded-lg shadow-md">
     <h4 className="text-blue-400">Rating: {rating} / 5</h4>
@@ -153,16 +159,11 @@ const ReviewCard = ({ rating, text, rollNumber, branch }) => (
   </div>
 );
 
+// ShareableLink component to display shareable link
 const ShareableLink = ({ nodeId }) => (
   <div className="bg-[#1a1a4d] p-6 rounded-lg shadow-md text-center">
     <h5 className="text-yellow-400">Shareable URL</h5>
     <p className="text-blue-400 underline cursor-pointer">https://vslr-demo.web.app/review</p>
-    <button
-      onClick={() => navigator.clipboard.writeText('https://vslr-demo.web.app/review')}
-      className="mt-2 bg-[#2a2a5c] text-white px-4 py-2 rounded hover:bg-[#333366]">
-      Copy URL
-    </button>
-    {/*<p className="mt-4 text-gray-400">Employee Node ID: {nodeId}</p>*/}
   </div>
 );
 

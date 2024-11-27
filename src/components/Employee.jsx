@@ -90,11 +90,24 @@ const Employee = () => {
   };
   
   
-  const calculateTotalSalary = (attendance, perDaySalary, withdrawals) => {
+  const calculateTotalSalary = (attendance, perDaySalary, withdrawals, isPresent) => {
     // Calculate total earned based on attendance
-    const attendanceTotal = Object.values(attendance || {}).reduce((total, status) => {
-      return total + (status === 'present' ? perDaySalary : 0);
-    }, 0);
+    let totalPresentDays = 0;
+  
+    // Count the number of present days
+    Object.values(attendance || {}).forEach((status) => {
+      if (status === 'present') {
+        totalPresentDays++;
+      }
+    });
+  
+    // If the employee is marked present, increment the present days count
+    if (isPresent) {
+      totalPresentDays++;
+    }
+  
+    // Calculate the total salary based on present days
+    const attendanceTotal = totalPresentDays * perDaySalary;
   
     // Calculate total withdrawn amount (handling multiple withdrawals per date)
     const totalWithdrawn = Object.values(withdrawals || {}).reduce((total, dailyWithdrawals) => {
@@ -104,53 +117,101 @@ const Employee = () => {
       );
     }, 0);
   
+    // Return the total salary minus any withdrawals
     return attendanceTotal - totalWithdrawn;
   };
   
+  
   const [selectedDate, setSelectedDate] = useState(null); // State to store the selected date
 
-const updateAttendanceStatus = (employeeKey, attendanceDate, status) => {
-  if (attendanceDate) {
-    // Update the status (either 'present' or 'absent') for the selected date
-    set(ref(database, `employees/${employeeKey}/attendance/${attendanceDate}`), status);
-  } else {
-    alert("Please select a date before marking attendance.");
+  const updateAttendanceStatus = (employeeKey, attendanceDate, status) => {
+    if (!attendanceDate) {
+      console.log('No date selected for attendance');
+      alert("Please select a date before marking attendance.");
+      return;
+    }
+  
+    console.log(`Updating attendance for ${employeeKey} on ${attendanceDate} to ${status}`);
+  
+    // Update the attendance status for the selected date
+    set(ref(database, `employees/${employeeKey}/attendance/${attendanceDate}`), status)
+      .then(() => {
+        console.log('Attendance status updated successfully.');
+  
+        // Fetch the employee data after updating attendance
+        const employee = employeesData[employeeKey];
+  
+        if (employee) {
+          console.log('Employee data:', employee);
+  
+          // Determine if the employee is present or absent
+          const isPresent = status === 'present';
+  
+          // Calculate the total salary
+          const totalSalary = calculateTotalSalary(
+            employee.attendance,
+            employee.perDaySalary,
+            employee.withdrawals,
+            isPresent
+          );
+          console.log('Calculated total salary:', totalSalary);
+  
+          // Update the total salary in the database
+          set(ref(database, `employees/${employeeKey}/totalSalary`), totalSalary)
+            .then(() => {
+              console.log('Total salary updated successfully in the database.');
+            })
+            .catch((error) => {
+              console.error('Error updating total salary:', error);
+            });
+        } else {
+          console.error('Employee data not found');
+        }
+      })
+      .catch((error) => {
+        console.error('Error updating attendance:', error);
+      });
+  };
+  
+
+
+const handleWithdraw = (employeeKey) => {
+  const withdrawAmount = withdrawals[employeeKey]?.amount;
+  const withdrawDate = withdrawals[employeeKey]?.date;
+
+  if (withdrawAmount > 0 && withdrawDate) {
+    const employee = employeesData[employeeKey];
+    const totalSalary = calculateTotalSalary(
+      employee.attendance,
+      employee.perDaySalary,
+      employee.withdrawals
+    );
+
+    if (withdrawAmount <= totalSalary) {
+      // Generate a unique ID for this withdrawal
+      const withdrawalId = new Date().getTime();
+
+      const newWithdrawalRef = ref(
+        database,
+        `employees/${employeeKey}/withdrawals/${withdrawDate}/${withdrawalId}`
+      );
+      set(newWithdrawalRef, parseInt(withdrawAmount));
+
+      // Recalculate and update total salary after withdrawal
+      const newTotalSalary = totalSalary - withdrawAmount;
+      set(ref(database, `employees/${employeeKey}/totalSalary`), newTotalSalary);
+
+      // Reset the input fields for the employee
+      setWithdrawals((prev) => ({
+        ...prev,
+        [employeeKey]: { date: '', amount: 0 },
+      }));
+    } else {
+      alert('Insufficient funds for this withdrawal.');
+    }
   }
 };
 
-
-    const handleWithdraw = (employeeKey) => {
-      const withdrawAmount = withdrawals[employeeKey]?.amount;
-      const withdrawDate = withdrawals[employeeKey]?.date;
-
-      if (withdrawAmount > 0 && withdrawDate) {
-        const employee = employeesData[employeeKey];
-        const totalSalary = calculateTotalSalary(
-          employee.attendance,
-          employee.perDaySalary,
-          employee.withdrawals
-        );
-
-        if (withdrawAmount <= totalSalary) {
-          // Generate a unique ID for this withdrawal
-          const withdrawalId = new Date().getTime();
-
-          const newWithdrawalRef = ref(
-            database,
-            `employees/${employeeKey}/withdrawals/${withdrawDate}/${withdrawalId}`
-          );
-          set(newWithdrawalRef, parseInt(withdrawAmount));
-
-          // Reset the input fields for the employee
-          setWithdrawals((prev) => ({
-            ...prev,
-            [employeeKey]: { date: '', amount: 0 },
-          }));
-        } else {
-          alert('Insufficient funds for this withdrawal.');
-        }
-      }
-    };
 
 
   const handleWithdrawInputChange = (employeeKey, type, value) => {

@@ -1,66 +1,31 @@
-* { 
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+.program-cards-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.program-cards {
+  display: flex;
+  width: max-content;
+  flex-wrap: nowrap;
+  transition: transform 0.1s linear;
+}
+
+.program-cards .card {
+  flex-shrink: 0;
+  width: 16rem; /* Adjust width as needed */
+  margin-right: 20px; /* Space between cards */
+}
+
+.program-cards img {
+  border-radius: 10px;
+}
+
+/* Ensure smooth scrolling and proper card positioning */
+@keyframes scrollLeft {
+  from {
+    transform: translateX(0);
   }
-  
-  body {
-    background: #f2f2f2;
+  to {
+    transform: translateX(-100%);
   }
-  
-  @keyframes slide {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(-100%);
-    }
-  }
-  
-  .logos {
-    overflow: hidden;  /* Prevent overflow */
-    padding: 20px 0;
-    white-space: nowrap;
-    position: relative;
-  }
-  
-  .logos-slide {
-    display: inline-flex;
-    animation: 35s slide infinite linear;
-    flex-wrap: nowrap;  /* Prevent wrapping of images */
-  }
-  
-  .logos-slide img {
-    height: 50px;
-    margin: 0 10px;  /* Adjust margin to make it look better */
-  }
-  
-  /* Mobile fix */
-  @media (max-width: 768px) {
-    .logos {
-      overflow-x: scroll;  /* Enable horizontal scrolling */
-      padding: 10px;  /* Reduce padding on smaller screens */
-      width: 100%;  /* Ensure full width for mobile */
-      -webkit-overflow-scrolling: touch;  /* Smooth scrolling on iOS */
-    }
-  
-    .logos-slide {
-      display: flex;  /* Use flex instead of inline-flex */
-      justify-content: flex-start;  /* Align images to the left */
-    }
-  
-    .logos-slide img {
-      height: 40px;  /* Adjust image size for mobile */
-      margin: 0 8px;  /* Adjust margins for mobile */
-    }
-  
-    /* Remove scrollbar appearance */
-    .logos::-webkit-scrollbar {
-      display: none;  /* Hide scrollbar in WebKit-based browsers */
-    }
-  
-    .logos {
-      scrollbar-width: none;  /* Firefox */
-    }
-  }
-  
+}

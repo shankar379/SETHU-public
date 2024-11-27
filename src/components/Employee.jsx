@@ -91,48 +91,67 @@ const Employee = () => {
   
   
   const calculateTotalSalary = (attendance, perDaySalary, withdrawals) => {
+    // Calculate total earned based on attendance
     const attendanceTotal = Object.values(attendance || {}).reduce((total, status) => {
       return total + (status === 'present' ? perDaySalary : 0);
     }, 0);
-    
-    const totalWithdrawn = Object.values(withdrawals || {}).reduce((total, amount) => total + amount, 0);
-
+  
+    // Calculate total withdrawn amount (handling multiple withdrawals per date)
+    const totalWithdrawn = Object.values(withdrawals || {}).reduce((total, dailyWithdrawals) => {
+      return (
+        total +
+        Object.values(dailyWithdrawals || {}).reduce((dailyTotal, amount) => dailyTotal + amount, 0)
+      );
+    }, 0);
+  
     return attendanceTotal - totalWithdrawn;
   };
+  
+  const [selectedDate, setSelectedDate] = useState(null); // State to store the selected date
 
-  const markAttendance = (employeeKey, attendanceDate) => {
-    if (attendanceDate) {
-      const employee = employeesData[employeeKey];
-      const currentStatus = employee.attendance?.[attendanceDate] === 'present' ? 'absent' : 'present';
-      set(ref(database, `employees/${employeeKey}/attendance/${attendanceDate}`), currentStatus);
-    }
-  };
+const updateAttendanceStatus = (employeeKey, attendanceDate, status) => {
+  if (attendanceDate) {
+    // Update the status (either 'present' or 'absent') for the selected date
+    set(ref(database, `employees/${employeeKey}/attendance/${attendanceDate}`), status);
+  } else {
+    alert("Please select a date before marking attendance.");
+  }
+};
 
-  const handleWithdraw = (employeeKey) => {
-    const withdrawAmount = withdrawals[employeeKey]?.amount;
-    const withdrawDate = withdrawals[employeeKey]?.date;
 
-    if (withdrawAmount > 0 && withdrawDate) {
-      const employee = employeesData[employeeKey];
-      const totalSalary = calculateTotalSalary(
-        employee.attendance,
-        employee.perDaySalary,
-        employee.withdrawals
-      );
+    const handleWithdraw = (employeeKey) => {
+      const withdrawAmount = withdrawals[employeeKey]?.amount;
+      const withdrawDate = withdrawals[employeeKey]?.date;
 
-      if (withdrawAmount <= totalSalary) {
-        const newWithdrawalRef = ref(database, `employees/${employeeKey}/withdrawals/${withdrawDate}`);
-        set(newWithdrawalRef, parseInt(withdrawAmount));
+      if (withdrawAmount > 0 && withdrawDate) {
+        const employee = employeesData[employeeKey];
+        const totalSalary = calculateTotalSalary(
+          employee.attendance,
+          employee.perDaySalary,
+          employee.withdrawals
+        );
 
-        setWithdrawals(prev => ({
-          ...prev,
-          [employeeKey]: { date: '', amount: 0 }
-        }));
-      } else {
-        alert("Insufficient funds for this withdrawal.");
+        if (withdrawAmount <= totalSalary) {
+          // Generate a unique ID for this withdrawal
+          const withdrawalId = new Date().getTime();
+
+          const newWithdrawalRef = ref(
+            database,
+            `employees/${employeeKey}/withdrawals/${withdrawDate}/${withdrawalId}`
+          );
+          set(newWithdrawalRef, parseInt(withdrawAmount));
+
+          // Reset the input fields for the employee
+          setWithdrawals((prev) => ({
+            ...prev,
+            [employeeKey]: { date: '', amount: 0 },
+          }));
+        } else {
+          alert('Insufficient funds for this withdrawal.');
+        }
       }
-    }
-  };
+    };
+
 
   const handleWithdrawInputChange = (employeeKey, type, value) => {
     setWithdrawals(prev => ({
@@ -211,6 +230,7 @@ const Employee = () => {
 
 <div className="w-full bg-[#0c063d] shadow-xl rounded-lg p-8">
   <h2 className="text-3xl font-bold mb-6 text-[#ccff33] text-center">Employee List</h2>
+  <div className="overflow-x-auto">
   <table className="table-auto w-full text-left border-separate border-spacing-2">
     <thead>
       <tr>
@@ -257,31 +277,45 @@ const Employee = () => {
         <td className="border-b border-[#333366] px-4 py-2 text-white">{employee.perDaySalary}</td>
         <td className="border-b border-[#333366] px-4 py-2 text-white">{employee.employeeId}</td>
         <td className="border-b border-[#333366] px-4 py-2 text-white">
-          <input
-            type="date"
-            onChange={(e) => markAttendance(key, e.target.value)}
-            className="w-full p-2 border border-[#4c005c] rounded bg-[#1a002b] text-white"
-          />
-          <button
-            onClick={() => markAttendance(key, new Date().toISOString().split("T")[0])}
-            className="w-full mt-2 bg-[#000033] text-white font-semibold p-2 rounded hover:bg-[#333366]"
-          >
-            Toggle Present/Absent
-          </button>
-          <div className="mt-4 space-y-1">
-            <div className="overflow-y-auto h-32 w-64 border border-gray-300 p-2"> {/* Adjust h-64 and w-64 for desired height and width */}
-              {Object.entries(employee.attendance || {}).map(([date, status]) => (
-                <div key={date} className="flex justify-between items-center">
-                  <span className="text-gray-300">{date}</span>
-                  <span className={`text-sm font-semibold ${status === 'present' ? 'text-green-500' : 'text-red-500'}`}>
-                    {status === 'present' ? 'Present' : 'Absent'}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
+  {/* Track selected date */}
+  <input
+    type="date"
+    onChange={(e) => setSelectedDate(e.target.value)} // Update state with selected date
+    className="w-full p-2 border border-[#4c005c] rounded bg-[#1a002b] text-white"
+  />
 
-        </td>
+  {/* Buttons for Present and Absent */}
+  <div className="flex gap-2 mt-2">
+    <button
+      onClick={() => updateAttendanceStatus(key, selectedDate, "present")} // Use selected date
+      className="w-full bg-green-600 text-white font-semibold p-2 rounded hover:bg-green-800"
+      disabled={!selectedDate} // Disable button if no date is selected
+    >
+      Present
+    </button>
+    <button
+      onClick={() => updateAttendanceStatus(key, selectedDate, "absent")} // Use selected date
+      className="w-full bg-red-600 text-white font-semibold p-2 rounded hover:bg-red-800"
+      disabled={!selectedDate} // Disable button if no date is selected
+    >
+      Absent
+    </button>
+  </div>
+
+  {/* Attendance History */}
+  <div className="mt-4 space-y-1">
+    <div className="overflow-y-auto h-32 w-64 border border-gray-300 p-2">
+      {Object.entries(employee.attendance || {}).map(([date, status]) => (
+        <div key={date} className="flex justify-between items-center">
+          <span className="text-gray-300">{date}</span>
+          <span className={`text-sm font-semibold ${status === 'present' ? 'text-green-500' : 'text-red-500'}`}>
+            {status === 'present' ? 'Present' : 'Absent'}
+          </span>
+        </div>
+      ))}
+    </div>
+  </div>
+</td>
         <td className="border-b border-[#333366] px-4 py-2 text-white">{daysPresent}</td>
         <td className="border-b border-[#333366] px-4 py-2 text-white">
           <div className="flex flex-col">
@@ -307,13 +341,29 @@ const Employee = () => {
               </button>
             </div>
             <div className="mt-4 space-y-1">
-              <div className="overflow-y-auto h-32 w-64 border border-gray-300 p-2"> {/* Adjust h-64 and w-64 for desired height and width */}
-                {Object.entries(employee.withdrawals || {}).map(([date, amount]) => (
-                  <div key={date} className="text-sm text-gray-300">
-                    {`${date}: $${amount}`}
-                  </div>
-                ))}
-              </div>
+            <div className="mt-4 space-y-1">
+  <div className="overflow-y-auto h-32 w-64 border border-gray-300 p-2">
+    {Object.entries(employee.withdrawals || {}).map(([date, dailyWithdrawals]) => (
+      <div key={date} className="text-sm text-gray-300">
+        <span className="font-bold">{date}:</span>
+        {typeof dailyWithdrawals === 'object' ? (
+          // Handle multiple withdrawals on the same date
+          <ul className="list-disc ml-4">
+            {Object.values(dailyWithdrawals).map((amount, index) => (
+              <li key={index} className="text-gray-300">
+                ${amount}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          // Handle a single withdrawal (for backward compatibility)
+          <span className="ml-2">${dailyWithdrawals}</span>
+        )}
+      </div>
+    ))}
+  </div>
+</div>
+
             </div>
 
           </div>
@@ -326,6 +376,7 @@ const Employee = () => {
 </tbody>
 
   </table>
+  </div>
 </div>
 
     </div>

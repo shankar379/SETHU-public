@@ -3,6 +3,7 @@ import './Profile.css';
 
 const Profile = () => {
   const [visibleSections, setVisibleSections] = useState([]);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   const profiles = [
     {
@@ -49,74 +50,123 @@ const Profile = () => {
           }
         });
       },
-      { threshold: 0.7 } // Trigger when 70% of the element is in view
+      { threshold: 0.7 }
     );
 
     const sections = document.querySelectorAll('.profile-section');
     sections.forEach((section) => observer.observe(section));
 
-    return () => observer.disconnect();
+    // Update isMobile state on window resize
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   return (
-    <div className="profile-container min-h-screen flex justify-center items-center">
+    <div className="profile-container">
       {profiles.map((profile, index) => (
         <div
           id={`section-${index}`}
           className={`profile-section ${visibleSections.includes(`section-${index}`) ? 'animate' : ''}`}
           key={index}
         >
-          {profile.picturePosition === "left" && (
-            <div
-              className="profile-picture slide-in-left"
-              style={{ backgroundImage: `url(${profile.picture})` }}
-            ></div>
-          )}
-          <div
-            className={`profile-details ${
-              profile.picturePosition === "left" ? "slide-in-right" : "slide-in-left"
-            }`}
-          >
-            <h1>{profile.name}</h1>
-            <div className="details-text">
-              {profile.details.map((detail, i) => (
-                <p key={i}>{detail}</p>
-              ))}
-            </div>
-            <div className="profile-links">
-              {profile.links.linkedin && (
-                <a href={profile.links.linkedin} target="_blank" rel="noopener noreferrer">
-                  <i className="fab fa-linkedin"></i>
-                </a>
+          {/* Adjust layout for mobile view */}
+          {isMobile && index === 1 ? (
+            <>
+              <div
+                className="profile-picture"
+                style={{ backgroundImage: `url(${profile.picture})` }}
+              ></div>
+              <div className="profile-details">
+                <h1>{profile.name}</h1>
+                <div className="details-text">
+                  {profile.details.map((detail, i) => (
+                    <p key={i}>{detail}</p>
+                  ))}
+                </div>
+                <div className="profile-links">
+                  {profile.links.linkedin && (
+                    <a href={profile.links.linkedin} target="_blank" rel="noopener noreferrer">
+                      <i className="fab fa-linkedin"></i>
+                    </a>
+                  )}
+                  {profile.links.github && (
+                    <a href={profile.links.github} target="_blank" rel="noopener noreferrer">
+                      <i className="fab fa-github"></i>
+                    </a>
+                  )}
+              
+                  {profile.links.hackerrank && (
+                    <a href={profile.links.hackerrank} target="_blank" rel="noopener noreferrer">
+                      <i className="fab fa-hackerrank"></i>
+                    </a>
+                  )}
+                  {profile.links.leetcode && (
+                    <a href={profile.links.leetcode} target="_blank" rel="noopener noreferrer">
+                      <i className="fas fa-code"></i>
+                    </a>
+                  )}
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              {profile.picturePosition === "left" && (
+                <div
+                  className="profile-picture slide-in-left"
+                  style={{ backgroundImage: `url(${profile.picture})` }}
+                ></div>
               )}
-              {profile.links.github && (
-                <a href={profile.links.github} target="_blank" rel="noopener noreferrer">
-                  <i className="fab fa-github"></i>
-                </a>
+              <div
+                className={`profile-details ${
+                  profile.picturePosition === "left" ? "slide-in-right" : "slide-in-left"
+                }`}
+              >
+                <h1>{profile.name}</h1>
+                <div className="details-text">
+                  {profile.details.map((detail, i) => (
+                    <p key={i}>{detail}</p>
+                  ))}
+                </div>
+                <div className="profile-links">
+                  {profile.links.linkedin && (
+                    <a href={profile.links.linkedin} target="_blank" rel="noopener noreferrer">
+                      <i className="fab fa-linkedin"></i>
+                    </a>
+                  )}
+                  {profile.links.github && (
+                    <a href={profile.links.github} target="_blank" rel="noopener noreferrer">
+                      <i className="fab fa-github"></i>
+                    </a>
+                  )}
+                  {profile.links.hackerrank && (
+                    <a href={profile.links.hackerrank} target="_blank" rel="noopener noreferrer">
+                      <i className="fab fa-hackerrank"></i>
+                    </a>
+                  )}
+                  {profile.links.portfolio && (
+    <a href={profile.links.portfolio} target="_blank" rel="noopener noreferrer">
+      <i className="fas fa-globe"></i> {/* Corrected for Font Awesome 5 */}
+    </a>
+  )}
+                  {profile.links.leetcode && (
+                    <a href={profile.links.leetcode} target="_blank" rel="noopener noreferrer">
+                      <i className="fas fa-code"></i>
+                    </a>
+                  )}
+                </div>
+              </div>
+              {profile.picturePosition === "right" && (
+                <div
+                  className="profile-picture slide-in-right"
+                  style={{ backgroundImage: `url(${profile.picture})` }}
+                ></div>
               )}
-              {profile.links.hackerrank && (
-                <a href={profile.links.hackerrank} target="_blank" rel="noopener noreferrer">
-                  <i className="fab fa-hackerrank"></i>
-                </a>
-              )}
-              {profile.links.leetcode && (
-                <a href={profile.links.leetcode} target="_blank" rel="noopener noreferrer">
-                  <i className="fas fa-code"></i> {/* Corrected for Font Awesome 5 */}
-                </a>
-              )}
-              {profile.links.portfolio && (
-                <a href={profile.links.portfolio} target="_blank" rel="noopener noreferrer">
-                  <i className="fas fa-globe"></i> {/* Corrected for Font Awesome 5 */}
-                </a>
-              )}
-
-            </div>
-          </div>
-          {profile.picturePosition === "right" && (
-            <div
-              className="profile-picture slide-in-right"
-              style={{ backgroundImage: `url(${profile.picture})` }}
-            ></div>
+            </>
           )}
         </div>
       ))}

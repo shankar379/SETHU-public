@@ -7,55 +7,47 @@ body {
     min-height: 100vh;
     font-family: Arial, sans-serif;
     background: linear-gradient(135deg, #1b003d, #000428);
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 .profile-links {
     display: flex;
     gap: 15px;
     margin-top: 20px;
-  }
-  
-  .profile-links a {
-    font-size: 1.5em;
+    justify-content: center;
+}
+
+.profile-links a {
+    font-size: 2.9em;
     color: #b19cd9;
     transition: color 0.3s ease;
-  }
-  
-  .profile-links a:hover {
+}
+
+.profile-links a:hover {
     color: #f39c12;
-  }
-  
-  .fa-solid,
-  .fab {
-    font-size: 1.5em;
-  }
-  
-  .profile-container {
+}
+
+.profile-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
-    background: linear-gradient(to right, #21002e, #000a4e); /* Very dark violet to very dark blue */
-    color: white; /* Ensure text is readable on the dark gradient */
-    padding: 20px; /* Optional: Add padding for spacing */
-  }
-  
+}
 
 .profile-section {
     display: flex;
+    flex-wrap: wrap; /* Added for better responsiveness */
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     width: 90%;
-    max-width: 1200px;
+    max-width: 900px;
     background: linear-gradient(135deg, #1b003d, #000428, #0f0e17);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
     border-radius: 12px;
     margin: 20px 0;
-    opacity: 0;
     padding: 20px;
-    overflow: hidden;
     transform: translateY(50px);
+    opacity: 0;
     transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
@@ -65,41 +57,54 @@ body {
 }
 
 .profile-picture {
-    width: 40%;
-    height: 300px;
+    flex: 1 1 200px; /* Flexible width for responsiveness */
+    max-width: 250px;
+    max-height: 250px;
+    aspect-ratio: 1 / 1; /* Ensures a square image */
     background-size: cover;
     background-position: center;
     filter: brightness(85%);
-    border-radius: 20px;
-    overflow: hidden;
+    border-radius: 50%; /* Changed to circular shape */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .profile-details {
-    width: 60%;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex: 2 1 300px; /* Flexible width for responsiveness */
+    padding: 20px;
     color: #d9d9d9;
+    text-align: left;
 }
 
 h1 {
-    font-size: 2em;
+    font-size: 1.8em; /* Reduced size for better scaling */
     color: #b19cd9;
     margin: 0 0 10px;
-    opacity: 0;
-    animation: slideInText 0.5s forwards ease 0.4s;
 }
 
 .details-text p {
-    font-size: 1em;
+    font-size: 0.9em; /* Adjusted font size */
     color: #a3b1c6;
     line-height: 1.5;
-    margin: 0;
-    opacity: 0;
-    animation: slideInText 0.5s forwards ease;
+    margin: 0 0 10px;
 }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .profile-section {
+        flex-direction: column; /* Stack elements vertically */
+        align-items: center;
+        text-align: center;
+    }
+
+    .profile-picture {
+        margin-bottom: 20px; /* Add space between picture and details */
+    }
+
+    .profile-details {
+        padding: 10px; /* Adjust padding for smaller screens */
+    }
+}
+
 
 .details-text p:nth-child(1) { animation-delay: 0.6s; }
 .details-text p:nth-child(2) { animation-delay: 0.8s; }

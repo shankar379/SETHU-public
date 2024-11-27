@@ -1,19 +1,9 @@
 import React, { Suspense } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Preload, useGLTF, Html, useProgress } from "@react-three/drei";
 import { motion } from "framer-motion";
 import './ContactUs.css';
-
-// Updated styles with larger text sizes and refined gradient colors
-const styles = {
-  paddingX: "sm:px-16 px-6",
-  paddingY: "sm:py-16 py-6",
-  padding: "sm:px-16 px-6 sm:py-16 py-10",
-  heroHeadText: "font-black text-white lg:text-[90px] sm:text-[70px] xs:text-[55px] text-[45px] lg:leading-[98px] mt-2",
-  heroSubText: "text-[#dfd9ff] font-medium lg:text-[35px] sm:text-[28px] xs:text-[22px] text-[18px] lg:leading-[45px]",
-  sectionHeadText: "text-white font-black md:text-[65px] sm:text-[55px] xs:text-[45px] text-[35px]",
-  sectionSubText: "sm:text-[20px] text-[16px] text-secondary uppercase tracking-wider",
-};
+import Footer from './footer';
 
 const slideIn = (direction, type, delay, duration) => ({
   hidden: {
@@ -33,8 +23,13 @@ const Earth = () => {
 };
 
 const EarthCanvas = () => (
-  <Canvas shadows frameloop="demand" dpr={[1, 2]} gl={{ preserveDrawingBuffer: true }}
-    camera={{ fov: 45, near: 0.1, far: 200, position: [-4, 3, 6] }}>
+  <Canvas
+    shadows
+    frameloop="demand"
+    dpr={[1, 2]}
+    gl={{ preserveDrawingBuffer: true }}
+    camera={{ fov: 45, near: 0.1, far: 200, position: [-4, 3, 6] }}
+  >
     <Suspense fallback={<CanvasLoader />}>
       <OrbitControls autoRotate enableZoom={false} maxPolarAngle={Math.PI / 2} minPolarAngle={Math.PI / 2} />
       <Earth />
@@ -53,63 +48,44 @@ const CanvasLoader = () => {
   );
 };
 
-// Updated Contact section with enhanced color palette and gradients
 const Contact = () => {
   return (
-    <div className="contact-container">
-      <motion.div
-        variants={slideIn("right", "tween", 0.2, 1)}
-        className="earth-canvas"
-      >
-        <EarthCanvas />
-      </motion.div>
+    <div>
+      <div className="contact-container">
+        <motion.div variants={slideIn("right", "tween", 0.2, 1)} className="earth-canvas">
+          <EarthCanvas />
+        </motion.div>
 
-      <motion.div
-        variants={slideIn("left", "tween", 0.2, 1)}
-        className="contact-details"
-      >
-        <p className={`${styles.sectionSubText} text-blue-300`}>Get in Touch</p>
-        <h3 className={`${styles.sectionHeadText} text-blue-100`}>Contact Us</h3>
+        <motion.div variants={slideIn("left", "tween", 0.2, 1)} className="contact-details">
+          <p className="text-blue-300">Get in Touch</p>
+          <h3 className="text-blue-100">Contact Us</h3>
 
-        <div className="contact-details mt-8">
-          {/* Address Section */}
-          <div className="contact-info mb-6">
-            <h3>
-              <i className="fas fa-map-marker-alt mr-2"></i> Address
-            </h3>
-            <p>Patha Thunga Padu Ramalayam Street, East Godavari</p>
+          <div className="contact-details mt-8">
+            {/* Address Section */}
+            <div className="contact-info mb-6">
+              <h3><i className="fas fa-map-marker-alt mr-2"></i> Address</h3>
+              <p>Patha Thunga Padu Ramalayam Street, East Godavari</p>
+            </div>
+
+            {/* Phone Section */}
+            <div className="contact-info mb-6">
+              <h3><i className="fas fa-phone-alt mr-2"></i> Phone</h3>
+              <p><a href="tel:+919515343071">(+91) 9515343071</a></p>
+              <p><a href="tel:+919603614667">(+91) 9603614667</a></p>
+            </div>
+
+            {/* Email Section */}
+            <div className="contact-info">
+              <h3><i className="fas fa-envelope mr-2"></i> Email</h3>
+              <p><a href="mailto:sethuteam3071@gmail.com">sethuteam3071@gmail.com</a></p>
+              <p><a href="mailto:koneramlalsuresh@gmail.com">koneramlalsuresh@gmail.com</a></p>
+              <p><a href="mailto:sanjaykotha678@gmail.com">sanjaykotha678@gmail.com</a></p>
+            </div>
           </div>
-
-          {/* Phone Section */}
-          <div className="contact-info mb-6">
-            <h3>
-              <i className="fas fa-phone-alt mr-2"></i> Phone
-            </h3>
-            <p>
-              <a href="tel:+919515343071">(+91) 9515343071</a>
-            </p>
-            <p>
-              <a href="tel:+919603614667">(+91) 9603614667</a>
-            </p>
-          </div>
-
-          {/* Email Section */}
-          <div className="contact-info">
-            <h3>
-              <i className="fas fa-envelope mr-2"></i> Email
-            </h3>
-            <p>
-              <a href="mailto:sethuteam3071@gmail.com">sethuteam3071@gmail.com</a>
-            </p>
-            <p>
-              <a href="mailto:koneramlalsuresh@gmail.com">koneramlalsuresh@gmail.com</a>
-            </p>
-            <p>
-              <a href="mailto:sanjaykotha678@gmail.com">sanjaykotha678@gmail.com</a>
-            </p>
-          </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
+      {/* Footer placed outside the contact container */}
+      <Footer />
     </div>
   );
 };

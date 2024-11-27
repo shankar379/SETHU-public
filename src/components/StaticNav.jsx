@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Disclosure } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 
@@ -17,13 +17,19 @@ function classNames(...classes) {
 }
 
 const StaticNav = ({ activeLink }) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen((prevState) => !prevState);
+  };
+
   return (
     <Disclosure as="nav" className="fixed w-full top-0 z-50 text-white">
       {({ open }) => (
         <>
           <div className="flex items-center justify-between p-4 bg-gradient-to-r from-[#0a0b1e] via-[#1c0f2e] to-[#0a0b1e] backdrop-blur-md bg-opacity-50 shadow-lg">
             <div className="flex items-center">
-              <img className="h-16 w-16 rounded-full shadow-xl" src="/sethu5.png" alt="Your Company" />
+              <img className="h-20 w-20 rounded-full shadow-xl" src="/images/SETHU_LOGO1.png" alt="Your Company" />
             </div>
 
             {/* Desktop Navigation */}
@@ -44,27 +50,32 @@ const StaticNav = ({ activeLink }) => {
                 </a>
               ))}
 
-              {/* Login Button with Enhanced Dropdown */}
-              <div className="relative group">
-                <button className="flex items-center px-6 py-3 text-gray-300 bg-transparent hover:bg-indigo-500 hover:text-white font-semibold rounded-lg transition duration-300 ease-in-out">
+              {/* Login Button with Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={toggleDropdown}
+                  className="flex items-center px-6 py-3 text-gray-300 bg-transparent hover:bg-indigo-500 hover:text-white font-semibold rounded-lg transition duration-300 ease-in-out"
+                >
                   Login <ChevronDownIcon className="w-5 h-5 ml-2" />
                 </button>
-                <div className="absolute right-0 hidden mt-2 w-48 bg-gradient-to-b from-indigo-700 via-indigo-800 to-indigo-900 text-white rounded-lg shadow-lg group-hover:block transition-all duration-300 transform group-hover:scale-100 scale-95 origin-top-right">
-                  <a
-                    href="/login"
-                    className="flex items-center px-4 py-2 hover:bg-indigo-600 rounded-md transition duration-200 space-x-2"
-                  >
-                    <span className="bg-blue-500 p-1 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">A</span>
-                    <span>Admin Login</span>
-                  </a>
-                  <a
-                    href="/employee-login"
-                    className="flex items-center px-4 py-2 hover:bg-indigo-600 rounded-md transition duration-200 space-x-2"
-                  >
-                    <span className="bg-green-500 p-1 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">E</span>
-                    <span>Employee Login</span>
-                  </a>
-                </div>
+                {isDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-gradient-to-b from-indigo-700 via-indigo-800 to-indigo-900 text-white rounded-lg shadow-lg transition-all duration-300 transform origin-top-right">
+                    <a
+                      href="/login"
+                      className="flex items-center px-4 py-2 hover:bg-indigo-600 rounded-md transition duration-200 space-x-2"
+                    >
+                      <span className="bg-blue-500 p-1 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">A</span>
+                      <span>Admin Login</span>
+                    </a>
+                    <a
+                      href="/employee-login"
+                      className="flex items-center px-4 py-2 hover:bg-indigo-600 rounded-md transition duration-200 space-x-2"
+                    >
+                      <span className="bg-green-500 p-1 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">E</span>
+                      <span>Employee Login</span>
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -103,28 +114,30 @@ const StaticNav = ({ activeLink }) => {
 
               {/* Login Dropdown in Mobile */}
               <div className="mt-4">
-                <Disclosure.Button
-                  as="div"
+                <button
+                  onClick={toggleDropdown}
                   className="flex items-center px-3 py-2 text-gray-300 bg-indigo-700 hover:bg-indigo-500 rounded-md text-base font-medium"
                 >
                   Login <ChevronDownIcon className="w-5 h-5 ml-2" />
-                </Disclosure.Button>
-                <div className="pl-4 mt-2">
-                  <a
-                    href="/login"
-                    className="flex items-center px-4 py-2 text-gray-300 hover:bg-indigo-600 rounded-md transition duration-200 space-x-2"
-                  >
-                    <span className="bg-blue-500 p-1 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">A</span>
-                    <span>Admin Login</span>
-                  </a>
-                  <a
-                    href="/employee-login"
-                    className="flex items-center px-4 py-2 text-gray-300 hover:bg-indigo-600 rounded-md transition duration-200 space-x-2"
-                  >
-                    <span className="bg-green-500 p-1 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">E</span>
-                    <span>Employee Login</span>
-                  </a>
-                </div>
+                </button>
+                {isDropdownOpen && (
+                  <div className="pl-4 mt-2">
+                    <a
+                      href="/login"
+                      className="flex items-center px-4 py-2 text-gray-300 hover:bg-indigo-600 rounded-md transition duration-200 space-x-2"
+                    >
+                      <span className="bg-blue-500 p-1 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">A</span>
+                      <span>Admin Login</span>
+                    </a>
+                    <a
+                      href="/employee-login"
+                      className="flex items-center px-4 py-2 text-gray-300 hover:bg-indigo-600 rounded-md transition duration-200 space-x-2"
+                    >
+                      <span className="bg-green-500 p-1 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">E</span>
+                      <span>Employee Login</span>
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
           </Disclosure.Panel>

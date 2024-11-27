@@ -68,7 +68,7 @@ const EmployeeProfile = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#0d001a] via-[#000033] to-[#000000] p-10">
-      <div style={{ height: '500px', width: '100%' }}></div>
+      <div style={{ height: '650px', width: '100%' }}></div>
       <div className="max-w-4xl mx-auto space-y-8">
         <div className="bg-[#1a1a4d] shadow-lg rounded-lg p-8 text-white space-y-6 border border-red-500">
           <div className="flex flex-col items-center p-8 mt-4">
@@ -83,11 +83,14 @@ const EmployeeProfile = () => {
             <p className="text-gray-400">Joining Date: {joiningDate}</p>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <InfoCard label="Per Day Salary" value={`$${perDaySalary}`} />
+            <InfoCard label="Per Day Salary" value={`₹ ${perDaySalary}/-`} />
             <InfoCard label="Days Present" value={daysPresent} />
-            <InfoCard label="Total Salary" value={`$${totalSalary}`} />
+            <InfoCard label="Total Salary" value={`₹ ${totalSalary}/-`} />
             <InfoCard label="Average Rating" value={`${averageRating} / 5`} />
           </div>
+        </div>
+        <div className="my-4">
+          <ShareableLink nodeId={employeeNodeId} />
         </div>
         <div className="my-4">
           <SectionCard title="Attendance Record" data={attendance} />
@@ -97,9 +100,6 @@ const EmployeeProfile = () => {
         </div>
         <div className="my-4">
           <ReviewsSection reviews={reviews} />
-        </div>
-        <div className="my-4">
-          <ShareableLink nodeId={employeeNodeId} />
         </div>
       </div>
     </div>
@@ -162,7 +162,7 @@ const ShareableLink = ({ nodeId }) => (
       className="mt-2 bg-[#2a2a5c] text-white px-4 py-2 rounded hover:bg-[#333366]">
       Copy URL
     </button>
-    <p className="mt-4 text-gray-400">Employee Node ID: {nodeId}</p>
+    {/*<p className="mt-4 text-gray-400">Employee Node ID: {nodeId}</p>*/}
   </div>
 );
 

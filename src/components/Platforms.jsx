@@ -4,41 +4,42 @@ import "./Platforms.css";
 const Platforms = () => {
   const [platformData, setPlatformData] = useState([
     {
-      name: "Platform A",
-      image: "/images/bg.WebP",
-      description: "A leading platform for collaborative learning.",
+      name: "codechef",
+      image: "/logos/codechef.jpg",
+      description: "codechef",
       amount: "$199",
     },
     {
-      name: "Platform B",
-      image: "/images/bg2.png",
-      description: "Innovative tools for creative professionals.",
+      name: "gfg",
+      image: "/logos/gfg.jpg",
+      description: "gfg.",
       amount: "$299",
     },
     {
-      name: "Platform C",
-      image: "/images/bg3.png",
-      description: "Specialized in AI and machine learning.",
+      name: "hacker earth",
+      image: "/logos/hacker earth.png",
+      description: "hacker earth.",
       amount: "$399",
     },
     {
-      name: "Platform D",
-      image: "/images/herobg.png",
-      description: "Focus on digital transformation and skills.",
+      name: "hackerrank",
+      image: "/logos/hackerrank.webp",
+      description: "hackerrank",
       amount: "$499",
     },
     {
-        name: "Platform E",
-        image: "/images/bg3.png",
-        description: "Specialized in AI and machine learning.",
+        name: "leetcode",
+        image: "/logos/leetcode.webp",
+        description: "leetcode",
         amount: "$399",
       },
       {
-        name: "Platform F",
-        image: "/images/herobg.png",
-        description: "Focus on digital transformation and skills.",
-        amount: "$499",
+        name: "hacker earth",
+        image: "/logos/hacker earth.png",
+        description: "hacker earth.",
+        amount: "$399",
       },
+      // minimum 6 cards details need
     
   ]);
 

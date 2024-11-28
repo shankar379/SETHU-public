@@ -25,7 +25,7 @@ const Profile = () => {
     },
     {
       name: "Sanju",
-      picture: "https://media.licdn.com/dms/image/v2/D5635AQEyRRLeHMDzuQ/profile-framedphoto-shrink_800_800/profile-framedphoto-shrink_800_800/0/1700983286696?e=1732723200&v=beta&t=XXaYQLS2e3czJBN3CAihtqb9EL-A7kXiMpeqR5iX6zY",
+      picture: "https://media.licdn.com/dms/image/v2/D5635AQEyRRLeHMDzuQ/profile-framedphoto-shrink_800_800/profile-framedphoto-shrink_800_800/0/1700983286696?e=1733414400&v=beta&t=6QtWBCx0uEZXEHuOZujSimZW5YPRcX63_4EXsf2XE9s",
       details: [
         "Senior Trainer and Program Coordinator at SETHU.",
         "Expert in skill development and hands-on learning strategies.",

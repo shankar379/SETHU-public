@@ -4,41 +4,49 @@ import "./Programs.css";
 const Programs = () => {
   const [programsData, setProgramsData] = useState([
     {
-      name: "Programs A",
-      image: "/images/bg.WebP",
-      description: "A leading program for collaborative learning.",
+      name: "AI & ML",
+      image: "/logos/aiml.jpg",
+      description: "AI & ML",
       amount: "$199",
     },
     {
-      name: "Programs B",
-      image: "/images/bg2.png",
-      description: "Innovative tools for creative professionals.",
+      name: "Problem Solving with python",
+      image: "/logos/python.png",
+      description: "Problem Solving.",
       amount: "$299",
     },
     {
-      name: "Programs C",
-      image: "/images/bg3.png",
+      name: "Problem Solving with java",
+      image: "/logos/java.png",
+      description: "Problem Solving.",
+      amount: "$299",
+    },
+    {
+      name: "Fullstack",
+      image: "/logos/fullstack.png",
+      description: "Fullstack",
+      amount: "$399",
+    },
+    {
+      name: "Frontend",
+      image: "/logos/Frontend.png",
+      description: "Frontend",
+      amount: "$499",
+    },
+    {
+      name: "Backend",
+      image: "/logos/Backend.jpg",
       description: "Specialized in AI and machine learning.",
       amount: "$399",
     },
     {
-      name: "Programs D",
-      image: "/images/herobg.png",
-      description: "Focus on digital transformation and skills.",
-      amount: "$499",
-    },
-    {
-      name: "Programs E",
-      image: "/images/bg3.png",
-      description: "Specialized in AI and machine learning.",
+      name: "Fullstack",
+      image: "/logos/fullstack.png",
+      description: "Fullstack",
       amount: "$399",
     },
-    {
-      name: "Programs F",
-      image: "/images/herobg.png",
-      description: "Focus on digital transformation and skills.",
-      amount: "$499",
-    },
+    // minimum 6 cards details need
+    
   ]);
 
   return (

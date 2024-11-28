@@ -17,11 +17,32 @@ const Employee = () => {
 
   useEffect(() => {
     const employeeRef = ref(database, 'employees');
+    
     onValue(employeeRef, (snapshot) => {
-      const data = snapshot.val();
-      setEmployeesData(data || {});
+      const employeesData = snapshot.val() || {};
+      const updatedEmployees = {};
+  
+      Object.keys(employeesData).forEach((employeeKey) => {
+        const employee = employeesData[employeeKey];
+        const reviewsRef = ref(database, `employees/${employeeKey}/reviews`);
+        
+        // Fetch reviews for each employee
+        onValue(reviewsRef, (reviewsSnapshot) => {
+          const reviews = reviewsSnapshot.val() || {};
+          const totalRating = Object.values(reviews).reduce(
+            (sum, review) => sum + parseInt(review.rating || 0, 10),
+            0
+          );
+          const averageRating = totalRating > 0 ? (totalRating / Object.keys(reviews).length).toFixed(1) : 0;
+  
+          // Update employee's averageRating
+          updatedEmployees[employeeKey] = { ...employee, averageRating };
+          setEmployeesData(updatedEmployees);
+        });
+      });
     });
-  }, []);
+  }, [database]);
+  
 
   const addEmployee = async (e) => {
     e.preventDefault();
@@ -228,6 +249,11 @@ const handleWithdraw = (employeeKey) => {
     return Object.values(attendance || {}).filter(status => status === 'present').length;
   };
 
+  const countAbsentDays = (attendance) => {
+    if (!attendance) return 0;
+    return Object.values(attendance).filter(status => status === 'absent').length;
+  };
+
   return (
     <div className="w-full p-8 min-h-screen bg-gradient-to-b from-[#0d001a] via-[#000033] to-[#000000] flex flex-col items-center">
       <div className="max-w-xl w-full bg-[#0d001a] shadow-xl rounded-lg p-6 mb-10">
@@ -301,10 +327,12 @@ const handleWithdraw = (employeeKey) => {
         <th className="border-b-2 border-[#333366] px-4 py-2 text-[#ccff33]">Per Day Salary</th>
         <th className="border-b-2 border-[#333366] px-4 py-2 text-[#ccff33]">Employee ID</th>
         <th className="border-b-2 border-[#333366] px-4 py-2 text-[#ccff33]">Attendance</th>
-        <th className="border-b-2 border-[#333366] px-4 py-2 text-[#ccff33]">No. of Days Present</th>
+        <th className="border-b-2 border-[#333366] px-4 py-2 text-[#ccff33]">Presented Days</th>
+        <th className="border-b-2 border-[#333366] px-4 py-2 text-[#ccff33]">Absented Days</th>
         <th className="border-b-2 border-[#333366] px-4 py-2 text-[#ccff33]">Withdrawals</th>
         <th className="border-b-2 border-[#333366] px-4 py-2 text-[#ccff33]">Total Salary</th>
         <th className="border-b-2 border-[#333366] px-4 py-2 text-[#ccff33]">Employee Average Rating</th>
+        <th className="border-b-2 border-[#333366] px-4 py-2 text-[#ccff33]">number of reviews</th>
       </tr>
     </thead>
     <tbody>
@@ -378,6 +406,7 @@ const handleWithdraw = (employeeKey) => {
   </div>
 </td>
         <td className="border-b border-[#333366] px-4 py-2 text-white">{daysPresent}</td>
+        <td className="border-b border-[#333366] px-4 py-2 text-white">{countAbsentDays(employee.attendance)}</td>
         <td className="border-b border-[#333366] px-4 py-2 text-white">
           <div className="flex flex-col">
             <div className="flex items-center space-x-2 mb-2">
@@ -431,6 +460,11 @@ const handleWithdraw = (employeeKey) => {
         </td>
         <td className="border-b border-[#333366] px-4 py-2 text-white">{totalSalary}</td>
         <td className="p-4">{employee.averageRating ? `${employee.averageRating} / 5` : 'Not Available'}</td> {/* Display average rating */}
+        <td className="p-4">
+          {employee.reviews ? Object.values(employee.reviews).length : 0} {/* Display number of reviews */}
+        </td>
+        
+
       </tr>
     );
   })}

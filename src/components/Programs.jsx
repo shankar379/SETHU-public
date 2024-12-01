@@ -17,7 +17,7 @@ const Programs = () => {
     },
     {
       name: "Problem Solving with java",
-      image: "/logos/java.png",
+      image: "/logos/java.jpg",
       description: "Problem Solving.",
       amount: "$299",
     },

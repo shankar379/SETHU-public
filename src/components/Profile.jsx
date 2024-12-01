@@ -11,7 +11,7 @@ const Profile = () => {
       picture: "https://sur-3071.github.io/Protfolio/c28.jpg",
       details: [
         "Chief Administrator at SETHU with a vision for enhancing skills.",
-        "Over 10 years of experience in organizational management.",
+        "Over 3 years of experience in organizational management.",
         "Dedicated to creating impactful training programs for growth."
       ],
       links: {

@@ -268,13 +268,31 @@ const handleWithdraw = (employeeKey) => {
       required
       className="w-full p-3 border border-[#333366] rounded bg-[#1a002b] text-white placeholder-gray-400"
     />
-    <input
-      type="date"
-      value={joiningDate}
-      onChange={(e) => setJoiningDate(e.target.value)}
-      required
-      className="w-full p-3 border border-[#333366] rounded bg-[#1a002b] text-white placeholder-gray-400"
-    />
+    <div className="relative">
+  <input
+    type="date"
+    value={joiningDate}
+    onChange={(e) => setJoiningDate(e.target.value)}
+    required
+    className="w-full p-3 border border-[#333366] rounded bg-[#1a002b] text-white placeholder-gray-400 appearance-none"
+  />
+  <span className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="white"
+      className="w-5 h-5"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+      />
+    </svg>
+  </span>
+</div>
     <input
       type="number"
       value={perDaySalary}
@@ -325,7 +343,7 @@ const handleWithdraw = (employeeKey) => {
         <th className="border-b-2 border-[#333366] px-4 py-2 text-[#ccff33]">Name</th>
         <th className="border-b-2 border-[#333366] px-4 py-2 text-[#ccff33]">Joining Date</th>
         <th className="border-b-2 border-[#333366] px-4 py-2 text-[#ccff33]">Per Day Salary</th>
-        <th className="border-b-2 border-[#333366] px-4 py-2 text-[#ccff33]">Employee ID</th>
+        <th className="border-b-2 border-[#333366] px-4 py-2 text-[#ccff33]">Employee ID and Password</th>
         <th className="border-b-2 border-[#333366] px-4 py-2 text-[#ccff33]">Attendance</th>
         <th className="border-b-2 border-[#333366] px-4 py-2 text-[#ccff33]">Presented Days</th>
         <th className="border-b-2 border-[#333366] px-4 py-2 text-[#ccff33]">Absented Days</th>
@@ -364,28 +382,46 @@ const handleWithdraw = (employeeKey) => {
         <td className="border-b border-[#333366] px-4 py-2 text-white">{employee.name}</td>
         <td className="border-b border-[#333366] px-4 py-2 text-white">{employee.joiningDate}</td>
         <td className="border-b border-[#333366] px-4 py-2 text-white">{employee.perDaySalary}</td>
-        <td className="border-b border-[#333366] px-4 py-2 text-white">{employee.employeeId}</td>
+        <td className="border-b border-[#333366] px-4 py-2 text-white">{employee.employeeId} ,{employee.employeePassword}</td>
         <td className="border-b border-[#333366] px-4 py-2 text-white">
   {/* Track selected date */}
-  <input
-    type="date"
-    onChange={(e) => setSelectedDate(e.target.value)} // Update state with selected date
-    className="w-full p-2 border border-[#4c005c] rounded bg-[#1a002b] text-white"
-  />
+  <div className="relative">
+    <input
+      type="date"
+      onChange={(e) => setSelectedDate(e.target.value)}
+      className="w-full p-2 border border-[#4c005c] rounded bg-[#1a002b] text-white appearance-none"
+    />
+    <span className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="white"
+        className="w-5 h-5"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+        />
+      </svg>
+    </span>
+  </div>
 
   {/* Buttons for Present and Absent */}
   <div className="flex gap-2 mt-2">
     <button
-      onClick={() => updateAttendanceStatus(key, selectedDate, "present")} // Use selected date
+      onClick={() => updateAttendanceStatus(key, selectedDate, "present")}
       className="w-full bg-green-600 text-white font-semibold p-2 rounded hover:bg-green-800"
-      disabled={!selectedDate} // Disable button if no date is selected
+      disabled={!selectedDate}
     >
       Present
     </button>
     <button
-      onClick={() => updateAttendanceStatus(key, selectedDate, "absent")} // Use selected date
+      onClick={() => updateAttendanceStatus(key, selectedDate, "absent")}
       className="w-full bg-red-600 text-white font-semibold p-2 rounded hover:bg-red-800"
-      disabled={!selectedDate} // Disable button if no date is selected
+      disabled={!selectedDate}
     >
       Absent
     </button>
@@ -397,7 +433,11 @@ const handleWithdraw = (employeeKey) => {
       {Object.entries(employee.attendance || {}).map(([date, status]) => (
         <div key={date} className="flex justify-between items-center">
           <span className="text-gray-300">{date}</span>
-          <span className={`text-sm font-semibold ${status === 'present' ? 'text-green-500' : 'text-red-500'}`}>
+          <span
+            className={`text-sm font-semibold ${
+              status === 'present' ? 'text-green-500' : 'text-red-500'
+            }`}
+          >
             {status === 'present' ? 'Present' : 'Absent'}
           </span>
         </div>
@@ -409,27 +449,48 @@ const handleWithdraw = (employeeKey) => {
         <td className="border-b border-[#333366] px-4 py-2 text-white">{countAbsentDays(employee.attendance)}</td>
         <td className="border-b border-[#333366] px-4 py-2 text-white">
           <div className="flex flex-col">
-            <div className="flex items-center space-x-2 mb-2">
-              <input
-                type="number"
-                placeholder="Amount"
-                value={withdrawals[key]?.amount || ''}
-                onChange={(e) => handleWithdrawInputChange(key, 'amount', e.target.value)}
-                className="p-1 border border-[#4c005c] rounded w-24 bg-[#1a002b] text-white"
-              />
-              <input
-                type="date"
-                value={withdrawals[key]?.date || ''}
-                onChange={(e) => handleWithdrawInputChange(key, 'date', e.target.value)}
-                className="p-1 border border-[#4c005c] rounded w-32 bg-[#1a002b] text-white"
-              />
-              <button
-                onClick={() => handleWithdraw(key)}
-                className="bg-[#000033] text-white font-semibold p-2 rounded hover:bg-[#333366]"
-              >
-                Withdraw
-              </button>
-            </div>
+          <div className="flex items-center space-x-2 mb-2">
+  <input
+    type="number"
+    placeholder="Amount"
+    value={withdrawals[key]?.amount || ''}
+    onChange={(e) => handleWithdrawInputChange(key, 'amount', e.target.value)}
+    className="p-1 border border-[#4c005c] rounded w-24 bg-[#1a002b] text-white"
+  />
+  
+  <div className="relative w-32">
+    <input
+      type="date"
+      value={withdrawals[key]?.date || ''}
+      onChange={(e) => handleWithdrawInputChange(key, 'date', e.target.value)}
+      className="p-1 border border-[#4c005c] rounded w-full bg-[#1a002b] text-white appearance-none"
+    />
+    <span className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="white"
+        className="w-5 h-5"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+        />
+      </svg>
+    </span>
+  </div>
+  
+  <button
+    onClick={() => handleWithdraw(key)}
+    className="bg-[#000033] text-white font-semibold p-2 rounded hover:bg-[#333366]"
+  >
+    Withdraw
+  </button>
+</div>
+
             <div className="mt-4 space-y-1">
             <div className="mt-4 space-y-1">
   <div className="overflow-y-auto h-32 w-64 border border-gray-300 p-2">

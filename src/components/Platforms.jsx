@@ -5,38 +5,33 @@ const Platforms = () => {
   const [platformData, setPlatformData] = useState([
     {
       name: "codechef",
-      image: "/logos/codechef.jpg",
+      image: "https://yt3.googleusercontent.com/Lkx3tvgHdRADC3wXQ5TfJZRTeH4nboEPA_-eJChOZ6jRkOdY35lcg014Whj36rHFXhrHY1T_4cs=s900-c-k-c0x00ffffff-no-rj",
       description: "codechef",
       amount: "$199",
     },
     {
-      name: "gfg",
-      image: "/logos/gfg.jpg",
-      description: "gfg.",
+      name: "hacker earth",
+      image: "https://upload.wikimedia.org/wikipedia/commons/e/e8/HackerEarth_logo.png",
+      description: "hacker earth.",
       amount: "$299",
     },
     {
-      name: "hacker earth",
-      image: "/logos/hacker earth.png",
-      description: "hacker earth.",
+      name: "leet code",
+      image: "https://avatars.githubusercontent.com/u/41718343?s=280&v=4",
+      description: "leet code.",
       amount: "$399",
     },
     {
-      name: "hackerrank",
-      image: "/logos/hackerrank.webp",
-      description: "hackerrank",
+      name: "gfg",
+      image: "https://yt3.googleusercontent.com/2Vh4NlpOdxCECWi6cP2vBugq2WMwad37pj26OopOV_12LF43KoEgPPBcry8MAdESz6Iqy5bkzYU=s900-c-k-c0x00ffffff-no-rj",
+      description: "gfg",
       amount: "$499",
     },
-    {
-        name: "leetcode",
-        image: "/logos/leetcode.webp",
-        description: "leetcode",
-        amount: "$399",
-      },
+
       {
-        name: "hacker earth",
-        image: "/logos/hacker earth.png",
-        description: "hacker earth.",
+        name: "hacker rank",
+        image: "https://amit839.github.io/resources/css/images/achievements/hackerrank-logo.jpg",
+        description: "hacker rank.",
         amount: "$399",
       },
       // minimum 6 cards details need

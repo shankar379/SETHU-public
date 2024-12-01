@@ -155,13 +155,18 @@ const Curriculums = () => {
                   <li key={idx} className="flex justify-between items-center bg-gray-900 p-2 rounded hover:bg-gray-700">
                     <span className="text-sm">{file.name}</span>
                     <a
-                      href={file.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-400 hover:text-blue-500 font-medium underline"
-                    >
-                      Download
-                    </a>
+  href={file.url}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="hover:opacity-80"
+>
+  <img
+    src="/images/download.png" 
+    alt="Download"
+    className="w-6 h-6 inline"
+  />
+</a>
+
                   </li>
                 ))
               ) : (

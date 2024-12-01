@@ -7,80 +7,52 @@
 
 /* Root Color Variables */
 :root {
-  --primary-color: #6C3BA3; /* Violet highlights */
-  --secondary-color: #345781; /* Subtle blue glow */
-  --bg-dark-navy: #0A0D1A; /* Dark navy for background */
-  --bg-deep-blue: #1B3D5F; /* Deep blue */
-  --text-white: #ffffff;
-  --text-secondary: #b0b0b0;
+  --primary-color: #6C3BA3;       /* Dark Violet */
+  --secondary-color: #345781;     /* Dark Blue */
+  --bg-dark-violet: #030214;      /* Very Dark Violet */
+  --bg-dark-blue: #0A0D1A;        /* Very Dark Blue */
+  --text-white: #ffffff;          /* White */
+  --text-secondary: #b0b0b0;      /* Light Gray */
 }
 
+/* Body Styling */
 body {
-  background: var(--bg-dark-navy);
+  background: var(--bg-dark-violet);
   color: var(--text-white);
+  font-family: 'Arial', sans-serif;
 }
 
 /* Colleges Section */
+/* Colleges Section */
 .collegess {
-  background: linear-gradient(135deg, var(--bg-dark-navy), var(--bg-deep-blue));
+  background: linear-gradient(135deg, #0f1c2f, #0a032f); /* Updated gradient colors */
   padding: 60px 0;
-  min-height: 100vh; /* Full viewport height on desktop */
+  min-height: 100vh;
   position: relative;
   overflow: hidden;
-  color: var(--text-white);
-}
-
-@keyframes slide {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-100%);
-  }
-}
-
-.logoss {
-  overflow: hidden;
-  display: flex;
-  white-space: nowrap;
-}
-
-.logoss-slide {
-  display: flex;
-  animation: slide 35s linear infinite;
-}
-
-.college-item {
-  position: relative;
-  width: 300px;
-  max-width: 100%;
-  margin: 0 30px;
   text-align: center;
+}
+
+
+h2 {
+  margin-bottom: 20px;
+}
+
+.upload-section {
+  margin-bottom: 40px;
+}
+
+.upload-section input[type="file"],
+.upload-section input[type="text"] {
+  display: block;
+  margin: 10px auto;
+  padding: 10px;
+  width: 90%;
+  max-width: 400px;
+  border-radius: 5px;
+  border: 1px solid var(--secondary-color);
+  background-color: var(--bg-dark-blue);
   color: var(--text-white);
-}
-
-.college-item img {
-  width: 100%;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0px 4px 15px var(--secondary-color);
-}
-
-.overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.8);
-  color: var(--text-white);
-  padding: 12px;
-  opacity: 0;
-  transition: opacity 0.3s;
-  border-radius: 10px;
-}
-
-.college-item:hover .overlay {
-  opacity: 1;
 }
 
 .upload-button {
@@ -95,4 +67,81 @@ body {
 
 .upload-button:hover {
   background-color: var(--secondary-color);
+}
+
+/* Sliding Logos Section */
+.logoss {
+  overflow: hidden;
+  display: flex;
+  white-space: nowrap;
+  margin-top: 20px;
+}
+
+.logoss-slide {
+  display: flex;
+  animation: slide 35s linear infinite;
+}
+
+@keyframes slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.college-item {
+  position: relative;
+  width: 300px;
+  margin: 0 15px;
+  text-align: center;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.college-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0px 4px 15px var(--secondary-color);
+}
+
+/* Overlay Styling */
+.overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.85); /* Dark Overlay */
+  padding: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  text-align: center;
+}
+
+.college-item:hover .overlay {
+  opacity: 1;
+}
+
+.overlay h3 {
+  font-size: 18px;
+  margin: 0;
+  color: var(--text-white);
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+.overlay p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  word-wrap: break-word;
+  white-space: normal;
+  max-height: 4.5em;
+  line-height: 1.5;
+  overflow: hidden;
 }

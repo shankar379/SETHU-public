@@ -40,9 +40,9 @@ const StaticNav = ({ activeLink }) => {
                   href={item.href}
                   className={classNames(
                     item.href.slice(1) === activeLink
-                      ? 'text-blue-500 font-bold'
-                      : 'text-gray-300 hover:bg-indigo-500 hover:text-white',
-                    'px-6 py-3 rounded-lg text-base font-semibold transition duration-300 ease-in-out transform hover:scale-105'
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-gray-800 text-gray-300 hover:bg-indigo-500 hover:text-white',
+                    'px-4 py-2 rounded-lg text-base font-semibold transition duration-300 ease-in-out transform hover:scale-105 shadow-md'
                   )}
                   aria-current={item.href.slice(1) === activeLink ? 'page' : undefined}
                 >
@@ -54,7 +54,7 @@ const StaticNav = ({ activeLink }) => {
               <div className="relative">
                 <button
                   onClick={toggleDropdown}
-                  className="flex items-center px-6 py-3 text-gray-300 bg-transparent hover:bg-indigo-500 hover:text-white font-semibold rounded-lg transition duration-300 ease-in-out"
+                  className="flex items-center px-4 py-2 bg-gray-800 text-gray-300 hover:bg-indigo-500 hover:text-white font-semibold rounded-lg shadow-md transition duration-300 ease-in-out"
                 >
                   Login <ChevronDownIcon className="w-5 h-5 ml-2" />
                 </button>
@@ -103,8 +103,8 @@ const StaticNav = ({ activeLink }) => {
                   className={classNames(
                     item.href.slice(1) === activeLink
                       ? 'bg-blue-500 text-white'
-                      : 'text-gray-300 hover:bg-blue-500 hover:text-white',
-                    'block px-3 py-2 rounded-md text-base font-medium'
+                      : 'bg-gray-800 text-gray-300 hover:bg-blue-500 hover:text-white',
+                    'block px-3 py-2 rounded-md text-base font-medium shadow-md'
                   )}
                   aria-current={item.href.slice(1) === activeLink ? 'page' : undefined}
                 >
@@ -116,7 +116,7 @@ const StaticNav = ({ activeLink }) => {
               <div className="mt-4">
                 <button
                   onClick={toggleDropdown}
-                  className="flex items-center px-3 py-2 text-gray-300 bg-indigo-700 hover:bg-indigo-500 rounded-md text-base font-medium"
+                  className="flex items-center px-3 py-2 bg-gray-800 text-gray-300 hover:bg-indigo-500 rounded-md text-base font-medium"
                 >
                   Login <ChevronDownIcon className="w-5 h-5 ml-2" />
                 </button>

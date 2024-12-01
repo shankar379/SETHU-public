@@ -34,8 +34,8 @@
   }
   
   .platform-card img {
-    width: 90%;
-    height: 190px;
+    width: 100%;
+    height: 200px;
     object-fit: cover;
   }
   
@@ -52,6 +52,14 @@
     margin: 10px 0 5px;
     font-size: 1.2rem;
     color: #ffffff;
+    word-wrap: break-word;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    overflow: hidden;      /* Ensure no overflow */
+    text-overflow: ellipsis; /* Truncate if too long */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;  /* Limit to 2 lines */
+    -webkit-box-orient: vertical;
   }
   
   .card-content p {

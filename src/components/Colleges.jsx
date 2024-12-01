@@ -1,35 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { storage, storageRef, listAll, getDownloadURL, uploadBytes } from '../firebase';
+import { storage, storageRef, listAll, getDownloadURL, uploadBytes, ref, set, push, database, get, child } from '../firebase'; // Import necessary methods
 import './Colleges.css';
 
 const Colleges = () => {
-  const [collegeData, setCollegeData] = useState([
-    { name: 'College A', image: '/images/sethu4.png', description: 'Top-ranked for engineering.' },
-    { name: 'College B', image: '/images/SETHU1.png', description: 'Leading in business education.' },
-    { name: 'College C', image: '/images/sethu3.png', description: 'Known for innovation in arts.' },
-    { name: 'College D', image: '/images/SETHU.png', description: 'Renowned for medical programs.' },
-  ]);
+  const [collegeData, setCollegeData] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [newImageName, setNewImageName] = useState('');
+  const [newImageDescription, setNewImageDescription] = useState('');
 
   useEffect(() => {
-    const fetchUploadedImages = async () => {
+    const fetchCollegeData = async () => {
       try {
-        const listRef = storageRef(storage, 'colleges/');
-        const res = await listAll(listRef);
-        const urls = await Promise.all(
-          res.items.map(async (item) => {
-            const url = await getDownloadURL(item);
-            return { name: item.name, image: url, description: 'Uploaded College Image' };
-          })
-        );
-        setCollegeData((prevData) => [...prevData, ...urls]);
+        const dbRef = ref(database, 'college_images');
+        const snapshot = await get(dbRef);
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          const formattedData = Object.keys(data).map((key) => ({
+            ...data[key], // Spread each college's name, image, and description
+          }));
+          setCollegeData(formattedData);
+        }
       } catch (error) {
-        console.error("Error fetching images:", error);
+        console.error("Error fetching college data:", error);
       }
     };
 
-    fetchUploadedImages();
+    fetchCollegeData();
   }, []);
 
   const handleFileChange = (e) => {
@@ -39,22 +36,38 @@ const Colleges = () => {
   };
 
   const handleUpload = async () => {
-    if (!selectedFile) return;
+    if (!selectedFile || !newImageName || !newImageDescription) {
+      alert("Please provide all required information.");
+      return;
+    }
     setUploading(true);
     try {
+      // Upload image to Firebase Storage
       const fileRef = storageRef(storage, `colleges/${selectedFile.name}`);
       await uploadBytes(fileRef, selectedFile);
       const imageUrl = await getDownloadURL(fileRef);
+
+      // Save image data in Firebase Realtime Database
+      const newCollegeRef = push(ref(database, 'college_images')); // Create a new push reference
+      await set(newCollegeRef, {
+        name: newImageName,
+        image: imageUrl,
+        description: newImageDescription,
+      });
+
+      // Update UI with the new data
       setCollegeData((prevData) => [
         ...prevData,
-        { name: 'New College', image: imageUrl, description: 'Description for new college' },
+        { name: newImageName, image: imageUrl, description: newImageDescription },
       ]);
-      alert("Image uploaded successfully!");
+      alert("Image uploaded and data stored successfully!");
     } catch (error) {
       console.error("Error uploading image:", error);
     }
     setUploading(false);
     setSelectedFile(null);
+    setNewImageName('');
+    setNewImageDescription('');
   };
 
   return (
@@ -66,7 +79,25 @@ const Colleges = () => {
 
       <div className="upload-section text-center mb-8">
         <input type="file" onChange={handleFileChange} />
-        <button className="upload-button" onClick={handleUpload} disabled={uploading}>
+        <div>
+          <input
+            type="text"
+            placeholder="Enter Image Name"
+            value={newImageName}
+            onChange={(e) => setNewImageName(e.target.value)}
+            className="text-black border border-gray-300 rounded p-2 mt-2"
+          />
+        </div>
+        <div>
+          <input
+            type="text"
+            placeholder="Enter Image Description"
+            value={newImageDescription}
+            onChange={(e) => setNewImageDescription(e.target.value)}
+            className="text-black border border-gray-300 rounded p-2 mt-2"
+          />
+        </div>
+        <button className="upload-button mt-4" onClick={handleUpload} disabled={uploading}>
           {uploading ? "Uploading..." : "Upload Image"}
         </button>
       </div>

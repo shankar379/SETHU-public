@@ -88,6 +88,7 @@
 }
 
 /* Responsive Styling */
+/* Responsive Styling */
 @media (max-width: 768px) {
   .achievements-section {
     padding: 30px 10px;
@@ -95,24 +96,32 @@
   }
 
   .section-title {
-    font-size: 24px;
+    font-size: 24px; /* Decrease title size */
   }
 
   .section-subtitle {
-    font-size: 14px;
+    font-size: 14px; /* Decrease subtitle size */
   }
 
   .achievement-card {
-    width: 100%;
-    max-width: 90%;
-    margin: 10px 0;
+    width: 100%;         /* Make card take full width */
+    max-width: 250px;    /* Decrease max-width for smaller cards */
+    margin: 10px 0;      /* Add margin to separate cards */
+    padding: 20px;       /* Adjust padding for smaller content */
+  }
+
+  .achievement-card img {
+    width: 120px;        /* Decrease icon size */
+    height: 120px;       /* Maintain aspect ratio */
   }
 
   .achievement-card h3 {
-    font-size: 16px;
+    font-size: 16px;     /* Decrease font size for title */
+    margin-top: 8px;     /* Adjust title spacing */
   }
 
   .achievement-card p {
-    font-size: 12px;
+    font-size: 12px;     /* Decrease font size for counter */
+    margin-top: 6px;     /* Adjust spacing */
   }
 }

@@ -1,8 +1,8 @@
 /* General Styles */
 #StaticReviews {
     overflow: hidden;
+    height: 100vh; /* Full height for all devices */
 }
- 
 .reviews-container {
     display: flex;
     justify-content: space-around;
@@ -75,7 +75,7 @@
 /* Mobile-specific adjustments */
 @media (max-width: 768px) {
     .reviews-container {
-        gap: 10px;
+        gap: 20px;
         height: 400px; /* Adjust height for smaller screens */
         transform: scale(1.3); /* Zoom in the review container */
         transform-origin: left center; /* Focus the zoom on the left */
@@ -86,7 +86,7 @@
     }
 
     .review-card {
-        padding: 15px;
+        padding: 25px;
         font-size: 13px;
     }
 }

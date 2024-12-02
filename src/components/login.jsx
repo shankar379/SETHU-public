@@ -6,28 +6,22 @@ import { useNavigate } from 'react-router-dom';
 const Login = ({ setIsLoggedIn }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loginError, setLoginError] = useState('');  // To handle error messages
-  const navigate = useNavigate(); // Hook for navigation
+  const [loginError, setLoginError] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setLoginError('');  // Reset error message
-  
+    setLoginError('');
     try {
-      // Reference the user in Firebase based on the email
       const sanitizedEmail = email.replace('.', '_');
       const userRef = ref(database, 'users/' + sanitizedEmail);
-  
-      // Get user data
       const snapshot = await get(userRef);
-  
+
       if (snapshot.exists()) {
         const userData = snapshot.val();
-        
-        // Check if the password matches
         if (userData.password === password) {
-          setIsLoggedIn(true);  // Set the login status to true
-          navigate(`/${sanitizedEmail}/sethu`);    // Redirect to the sanitized email page
+          setIsLoggedIn(true);
+          navigate(`/${sanitizedEmail}/sethu`);
         } else {
           setLoginError('Invalid password');
         }
@@ -39,28 +33,25 @@ const Login = ({ setIsLoggedIn }) => {
       setLoginError('Login failed, please try again.');
     }
   };
-  
 
   return (
     <div
-  className="min-h-screen w-full flex justify-center items-center"
-  style={{
-    backgroundImage: 'url(/images/sethu3.png)',
-    backgroundSize: 'cover',      // Adjust to cover the screen
-    backgroundPosition: 'center', // Center the image
-    backgroundRepeat: 'no-repeat',
-    color: '#FFFFFF',
-    minHeight: '100vh',           // Ensure it covers the full height
-    backgroundAttachment: 'fixed' // Keeps the background fixed during scroll
-  }}
->
-
+      className="min-h-screen w-full flex justify-center items-center"
+      style={{
+        backgroundImage: 'url(/images/sethu3.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        color: '#FFFFFF',
+        backgroundAttachment: 'fixed'
+      }}
+    >
       <div
         className="p-6 sm:p-8 lg:p-10 rounded-lg shadow-2xl"
         style={{
+          maxWidth: '360px', // Increased by 25px from 500px
           width: '100%',
-          maxWidth: '500px',
-          backgroundColor: 'rgba(240, 240, 240, 0.35)', 
+          backgroundColor: 'rgba(240, 240, 240, 0.35)',
           borderRadius: '20px',
           border: '1px solid #333',
           boxShadow: '0 4px 10px rgba(0, 0, 0, 0.3)',
@@ -107,7 +98,6 @@ const Login = ({ setIsLoggedIn }) => {
             Login
           </button>
         </form>
-        {/* Display login error if any */}
         {loginError && (
           <p className="mt-4 text-red-600 text-center">
             {loginError}

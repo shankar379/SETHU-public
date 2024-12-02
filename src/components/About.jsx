@@ -69,7 +69,7 @@ const About = () => {
       </div>
 
       {/* Programs Section */}
-      <div className="mt-10 w-full max-w-4xl bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
+      {/* <div className="mt-10 w-full max-w-4xl bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
         <h3 className="text-3xl font-semibold text-center mb-4 text-yellow-400">Programs</h3>
         <textarea
           value={programs}
@@ -80,10 +80,10 @@ const About = () => {
           className="w-full h-32 p-2 bg-gray-700 text-gray-300 rounded-lg"
           placeholder="Enter programs description..."
         />
-      </div>
+      </div> */}
 
       {/* Platforms Section */}
-      <div className="mt-10 w-full max-w-4xl bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
+      {/* <div className="mt-10 w-full max-w-4xl bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
         <h3 className="text-3xl font-semibold text-center mb-4 text-yellow-400">Platforms</h3>
         <textarea
           value={platformsText}
@@ -94,7 +94,7 @@ const About = () => {
           className="w-full h-32 p-2 bg-gray-700 text-gray-300 rounded-lg"
           placeholder="Describe platforms..."
         />
-      </div>
+      </div> */}
 
       {/* Save Button */}
       {isEditing && (

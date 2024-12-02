@@ -15,29 +15,34 @@ const EmployeeProfile = () => {
 
   useEffect(() => {
     const employeeRef = ref(database, 'employees');
-
+  
     const unsubscribe = onValue(employeeRef, (snapshot) => {
       const employees = snapshot.val();
       const employeeEntry = Object.entries(employees).find(
         ([key, emp]) => emp.employeeId === employeeId
       );
-
+  
       if (employeeEntry) {
         const [nodeId, employee] = employeeEntry;
         setEmployeeData(employee);
         setEmployeeNodeId(nodeId);
-        fetchTotalSalary(nodeId);
+  
         calculateDaysPresent(employee.attendance);
         calculateAverageRating(employee.reviews);
-        const numberOfReviews = calculateNumberOfReviews(employee.reviews);
-        setNumberOfReviews(numberOfReviews);
+        setNumberOfReviews(calculateNumberOfReviews(employee.reviews));
+  
+        // Fetch withdrawals and calculate total salary
+        const totalWithdrawals = calculateTotalWithdrawals(employee.withdrawals || {});
+        const calculatedTotalSalary = TotalEmployeeSalary(employee.perDaySalary, daysPresent);
+        setTotalSalary(calculatedTotalSalary); // Set total salary based on days present and withdrawals
+  
       } else {
         navigate('/employee-login');
       }
     });
-
+  
     return () => unsubscribe();
-  }, [employeeId, navigate]);
+  }, [employeeId, navigate, daysPresent]);
 
   const fetchTotalSalary = (nodeId) => {
     const totalSalaryRef = ref(database, `employees/${nodeId}/totalSalary`);
@@ -47,18 +52,21 @@ const EmployeeProfile = () => {
         setTotalSalary(salary);
       }
     });
-  };
+  };  
+
 
   const calculateDaysPresent = (attendance) => {
-    const presentDays = Object.values(attendance || {}).filter((status) => status === 'present').length;
-    setDaysPresent(presentDays);
-
-    // Calculate total number of days (assuming attendance object contains one entry per day)
-    const totalDays = Object.keys(attendance || {}).length;
-
-    // Calculate absent days
+    if (!attendance) {
+      setDaysPresent(0);
+      setDaysAbsent(0);
+      return 0;
+    }
+    const presentDays = Object.values(attendance).filter((status) => status === 'present').length;
+    const totalDays = Object.keys(attendance).length;
     const absentDays = totalDays - presentDays;
     setDaysAbsent(absentDays);
+    setDaysPresent(presentDays);
+    return presentDays;
   };
 
   const calculateAverageRating = (reviews) => {
@@ -77,16 +85,45 @@ const EmployeeProfile = () => {
     return 0;
   };
 
+  const calculateTotalWithdrawals = (withdrawals) => {
+    if (!withdrawals) return 0;
+        
+    // Loop through each date and withdrawal entry
+    return Object.values(withdrawals).reduce((sum, dateWithdrawals) => {
+      // For each date, loop through the withdrawal records
+      return sum + Object.values(dateWithdrawals).reduce((innerSum, amount) => {
+        const numericAmount = parseFloat(amount);
+        return isNaN(numericAmount) ? innerSum : innerSum + numericAmount;
+      }, 0);
+    }, 0);
+  };
+
+  const flattenWithdrawals = (withdrawals) => {
+    return Object.values(withdrawals).flatMap((entry) =>
+      typeof entry === "object" ? Object.values(entry) : entry
+    );
+  };
+
+  // New function to calculate total salary based on present days and per day salary
+  const TotalEmployeeSalary = (perDaySalary, daysPresent) => {
+    return daysPresent * parseFloat(perDaySalary || 0);
+  };
+  
+
+
   if (!employeeData) {
     return <div className="flex items-center justify-center h-screen text-white">Loading...</div>;
   }
-
+  
   const { name, joiningDate, perDaySalary, profilePhoto } = employeeData;
+  const totalWithdrawals = calculateTotalWithdrawals(employeeData.withdrawals || {});
+  const totalCalculatedSalary = daysPresent * parseFloat(perDaySalary || 0) - totalWithdrawals;
 
+  
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#0d001a] via-[#000033] to-[#000000] px-4 sm:px-10 py-14">
       {/* Empty Container at the top */}
-      <div style={{ height: '900px' }}></div>
+      <div style={{ height: '1100px' }}></div>
 
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Profile Section */}
@@ -111,7 +148,8 @@ const EmployeeProfile = () => {
             <InfoCard label="Total Salary" value={`₹ ${totalSalary}/-`} />
             <InfoCard label="Average Rating" value={`${averageRating} / 5`} />
             <InfoCard label="Number of Reviews" value={numberOfReviews} />
-            
+            <InfoCard label="Total Withdraw" value={`₹ ${isNaN(totalWithdrawals) ? 0 : totalWithdrawals}/-`} /> 
+            <InfoCard label="Remaining Salary" value={`₹ ${isNaN(totalCalculatedSalary) ? 0 : totalCalculatedSalary}/-`} />
           </div>
         </div>
         {/* Other sections */}
@@ -143,7 +181,7 @@ const InfoCard = ({ label, value }) => (
 // Updated Attendance, Withdrawal History, Reviews Section, and Shareable Link UI
 
 const SectionCard = ({ title, data, isCurrency = false }) => (
-  <div className="bg-[#1a1a4d] shadow-lg rounded-lg p-6 text-white transition-all duration-300 hover:shadow-xl hover:scale-105">
+  <div className="bg-[#1a1a4d] shadow-lg rounded-lg p-4 text-white transition-all duration-300 hover:shadow-xl hover:scale-105">
     <h3 className="text-2xl font-bold text-gradient mb-6">{title}</h3>
     <div className="space-y-4 max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900">
       {data ? (
@@ -151,7 +189,7 @@ const SectionCard = ({ title, data, isCurrency = false }) => (
           typeof entries === 'object' ? (
             Object.entries(entries).map(([id, value]) => (
               <div key={id} className="flex justify-between">
-                <span className="text-gray-300">{`${date} - ${new Date(
+                <span className="text-gray-300 text-sm mr-2">{`${date} - ${new Date(
                   parseInt(id)
                 ).toLocaleTimeString()}`}</span>
                 <span
@@ -169,7 +207,7 @@ const SectionCard = ({ title, data, isCurrency = false }) => (
             ))
           ) : (
             <div key={date} className="flex justify-between">
-              <span className="text-gray-300">{date}</span>
+              <span className="text-gray-300 text-sm mr-2">{date}</span>
               <span
                 className={`font-medium ${
                   isCurrency
@@ -223,7 +261,7 @@ const ShareableLink = ({ nodeId }) => (
       Here is a link to your profile that you can share:
       <br />
       <a
-        href={`https://yourwebsite.com/employee/${nodeId}`}
+        href={`https://vslr-demo.web.app/review `}
         className="text-blue-500 hover:text-blue-700 truncate"
         target="_blank"
         rel="noopener noreferrer"
@@ -234,4 +272,4 @@ const ShareableLink = ({ nodeId }) => (
   </div>
 );
 
-export default EmployeeProfile;
+export default EmployeeProfile; 

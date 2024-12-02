@@ -79,10 +79,10 @@ const Achievements = () => {
   }, []);
 
   const achievementsData = [
-    { title: 'Teached Colleges', target: 120, icon: '/logos/teached.webp' },
+    { title: 'Teached Colleges', target: 25, icon: '/logos/teached.webp' },
     { title: 'Projects Completed', target: 75, icon: '/logos/projects.webp' },
-    { title: 'Job No. of Students', target: 1000, icon: '/logos/student.webp' },
-    { title: 'Years Experience', target: 5, icon: '/logos/years.webp' },
+    { title: 'Job No. of Students', target: 100, icon: '/logos/student.webp' },
+    { title: 'Years Experience', target: 3, icon: '/logos/years.webp' },
   ];
 
   return (

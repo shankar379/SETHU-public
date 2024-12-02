@@ -40,9 +40,9 @@ const Programs = () => {
       amount: "$399",
     },
     {
-      name: "Fullstack",
-      image: "/logos/fullstack.png",
-      description: "Fullstack",
+      name: "Data Structures",
+      image: "https://play-lh.googleusercontent.com/9zvNJHedNg_6lOdwcodODMVsyeHKxuTIpnbBzomRGGZAp_vKVXnd5SlF8XZcXyGYjQ",
+      description: "Data Structures",
       amount: "$399",
     },
     // minimum 6 cards details need

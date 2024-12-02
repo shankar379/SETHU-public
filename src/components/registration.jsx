@@ -63,11 +63,11 @@ const Register = () => {
   }}
 >
 
-      <div
+<div
         className="p-6 sm:p-8 lg:p-10 rounded-lg shadow-2xl"
         style={{
+          maxWidth: '360px', // Increased by 25px from 500px
           width: '100%',
-          maxWidth: '500px',
           backgroundColor: 'rgba(240, 240, 240, 0.35)',
           borderRadius: '20px',
           border: '1px solid #333',

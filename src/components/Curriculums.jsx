@@ -68,7 +68,7 @@ const Curriculums = () => {
   };
 
   return (
-    <div className="p-8 bg-black text-white min-h-screen">
+    <div className="p-8 bg-[#1d1350] text-white min-h-screen">
       <h2 className="text-3xl font-bold mb-6 text-center text-[rgba(75,30,133,1)]">
         Curriculums
       </h2>
@@ -122,7 +122,7 @@ const Curriculums = () => {
             }}
             className="hidden"
           />
-          <span className="text-lg text-[rgba(75,30,133,1)]">
+          <span className="text-lg text-[#ffffff]">
             {selectedFile ? selectedFile.name : 'Upload PDF'}
           </span>
           <p className="text-sm text-gray-500">

@@ -22,7 +22,7 @@ const Platforms = () => {
       amount: "$399",
     },
     {
-      name: "gfg",
+      name: "Geeks for Geeks",
       image: "https://yt3.googleusercontent.com/2Vh4NlpOdxCECWi6cP2vBugq2WMwad37pj26OopOV_12LF43KoEgPPBcry8MAdESz6Iqy5bkzYU=s900-c-k-c0x00ffffff-no-rj",
       description: "gfg",
       amount: "$499",

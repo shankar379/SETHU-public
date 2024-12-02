@@ -185,7 +185,7 @@ const StaticReviews = () => {
 
   return (
     <section id="StaticReviews" className="w-full h-full">
-      <div className="w-full reviews-container">
+      <div className="w-full h-full reviews-container">
         <div className="lane lane-up">
           {reviews.concat(reviews).map((review, index) => (
             <div className="review-card" key={`up-${index}`}>

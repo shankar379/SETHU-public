@@ -13,6 +13,8 @@ const Home = () => {
         >
             <div className="gradient-overlay" />
             <div className="content">
+                {/* Empty Container at the top */}
+                <div style={{ height: '400px' }}></div>
                 <h2 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
                     Welcome to 
                 </h2>
@@ -25,7 +27,7 @@ const Home = () => {
                     Empowering your potential with exceptional skills and practical knowledge.
                 </p>
                 <a 
-                    href="#"
+                    href="#contact"
                     className="btn-learn-more"
                 >
                     Learn More
